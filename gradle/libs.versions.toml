@@ -1,0 +1,163 @@
+[versions]
+kotlin = "2.3.20"
+kotlinx-modules = "1.11.0"
+jvm = "JVM_25"
+jdk = "25"
+target = "VERSION_25"
+kover = "0.9.1"
+sonarqube = "6.2.0.5505"
+thomas-logger = "1.0.2"
+spring-boot = "4.1.0"
+spring-dependency = "1.1.7"
+
+logback-classic = "1.5.18"
+logback-kotlin = "7.0.7"
+
+thomas-core = "1.0.5"
+
+tomcat-server = "11.0.22"
+
+jackson-modules = "3.2.0"
+
+moneta-modules = "1.4.5"
+
+junit-jupiter = "6.0.3"
+
+mockito-core = "5.11.0"
+mockito-inline = "5.2.0"
+mockito-kotlin = "5.2.1"
+
+mockk-kotlin = "1.14.3"
+
+system-stubs = "2.1.8"
+
+skyscreamer-jsonassert = "1.5.3"
+
+[plugins]
+kotlin-lang = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+test-fixtures = { id = "java-test-fixtures" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+sonarqube-scanner = { id = "org.sonarqube", version.ref = "sonarqube" }
+thomas-logger = { id = "com.thomas.logger", version.ref = "thomas-logger" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency = { id = "io.spring.dependency-management", version.ref = "spring-dependency" }
+
+[libraries]
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlin-stdlib-common = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-stdlib-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-modules" }
+kotlinx-coroutines-slf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j", version.ref = "kotlinx-modules" }
+kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-reactor", version.ref = "kotlinx-modules" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-modules" }
+
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-modules" }
+kotlinx-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serialization-cbor", version.ref = "kotlinx-modules" }
+
+log-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
+log-logback-kotlin = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "logback-kotlin" }
+
+thomas-core-lib = { module = "com.thomas:thomas-core", version.ref = "thomas-core" }
+thomas-logger-runtime = { module = "com.thomas:logger-runtime", version.ref = "thomas-logger" }
+
+spring-boot-web-base = { module = "org.springframework:spring-web" }
+spring-boot-jackson-base = { module = "org.springframework.boot:spring-boot-jackson" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-boot-autoconfigure-base = { module = "org.springframework.boot:spring-boot-autoconfigure" }
+spring-boot-autoconfigure-processor = { module = "org.springframework.boot:spring-boot-autoconfigure-processor" }
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+
+tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcat-server" }
+
+jackson-core-base = { module = "tools.jackson.core:jackson-core", version.ref = "jackson-modules" }
+jackson-databind-base = { module = "tools.jackson.core:jackson-databind", version.ref = "jackson-modules" }
+jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jackson-modules" }
+jackson-module-blackbird = { module = "tools.jackson.module:jackson-module-blackbird", version.ref = "jackson-modules" }
+jackson-datatype-javaxmoney = { module = "tools.jackson.datatype:jackson-datatype-javax-money", version.ref = "jackson-modules" }
+
+moneta-core-base = { module = "org.javamoney.moneta:moneta-core", version.ref = "moneta-modules" }
+
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter" }
+
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core" }
+mockito-junit = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito-core" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito-inline" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito-kotlin" }
+
+mockk-kotlin = { module = "io.mockk:mockk", version.ref = "mockk-kotlin" }
+
+system-stubs-core = { module = "uk.org.webcompere:system-stubs-core", version.ref = "system-stubs" }
+system-stubs-jupiter = { module = "uk.org.webcompere:system-stubs-jupiter", version.ref = "system-stubs" }
+
+skyscreamer-jsonassert = { module = "org.skyscreamer:jsonassert", version.ref = "skyscreamer-jsonassert" }
+
+[bundles]
+kotlin-stdlib-all = [
+  "kotlin-stdlib-jdk8",
+  "kotlin-stdlib-common",
+  "kotlin-stdlib-reflect",
+]
+
+kotlinx-modules-all = [
+  "kotlinx-coroutines-core",
+  "kotlinx-coroutines-slf4j",
+  "kotlinx-coroutines-reactor",
+  "kotlinx-serialization-core",
+  "kotlinx-serialization-cbor",
+]
+
+log-logback-all = [
+  "log-logback-classic",
+  "log-logback-kotlin",
+]
+
+thomas-lib-all = [
+  "thomas-core-lib",
+  "thomas-logger-runtime",
+]
+
+spring-boot-all = [
+  "spring-boot-web-base",
+  "spring-boot-jackson-base",
+  "spring-boot-starter-security",
+]
+
+spring-compile-all = [
+  "spring-boot-autoconfigure-base",
+]
+
+tomcat-all = [
+  "tomcat-embed-core",
+]
+
+jackson-all = [
+  "jackson-core-base",
+  "jackson-databind-base",
+  "jackson-module-kotlin",
+  "jackson-module-blackbird",
+  "jackson-datatype-javaxmoney",
+]
+
+moneta-all = [
+  "moneta-core-base",
+]
+
+junit-all = [
+  "kotlinx-coroutines-test",
+  "junit-jupiter-api",
+  "junit-jupiter-engine",
+  "junit-jupiter-params",
+  "mockito-core",
+  "mockito-junit",
+  "mockito-inline",
+  "mockito-kotlin",
+  "mockk-kotlin",
+  "system-stubs-core",
+  "system-stubs-jupiter",
+  "skyscreamer-jsonassert",
+]

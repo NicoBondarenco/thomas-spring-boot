@@ -1,0 +1,87 @@
+# Dependency Lock Files
+dependency-locks/
+
+# Build Output
+build/
+out/
+target/
+
+# IDE Files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# Logs
+*.log
+logs/
+
+# Runtime
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage Reports
+.nyc_output/
+coverage/
+*.lcov
+
+# Dependency directories
+node_modules/
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Secrets
+secrets.properties
+*.key
+*.pem
+*.p12
+*.keystore
+
+# Temporary Files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Archive Files
+*.tar.gz
+*.zip
+*.rar
+
+# Eclipse
+.metadata/
+.workspace/
+
+# Test Results
+test-results/
+test-output/
+/build-cache/
+/htmlReport/
+/.github/workflows-test/
+/annotations/

@@ -4,8 +4,6 @@ import com.thomas.core.context.SessionContextHolder.updateContext
 import com.thomas.core.model.security.SecurityUser
 import com.thomas.logger.log.KotlinLogger
 import com.thomas.spring.boot.extension.bearerToken
-import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterSecurityContextDecryptionError
-import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterSecurityContextDefaultError
 import com.thomas.spring.boot.security.SecurityUserAuthentication
 import com.thomas.spring.boot.token.TokenDecrypter
 import io.github.oshai.kotlinlogging.Level.DEBUG
@@ -14,10 +12,8 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.context.SecurityContextHolder.getContext
-import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
-@Component
 class AuthenticationFilter(
     private val tokenDecrypter: TokenDecrypter
 ) : OncePerRequestFilter(), KotlinLogger by KotlinLogger.logger(AuthenticationFilter::class) {
@@ -29,12 +25,7 @@ class AuthenticationFilter(
                 val securityUser = tokenDecrypter.decrypt(token)
                 updateSecurityContext(securityUser, token)
             } catch (e: Exception) {
-                at(DEBUG, exception = e) {
-                    filterAuthenticationFilterSecurityContextDecryptionError(
-                        token,
-                        e.message?: filterAuthenticationFilterSecurityContextDefaultError()
-                    )
-                }
+                at(DEBUG, exception = e) { "Error decrypting token $token: ${e.message ?: "No detail available"}" }
                 clearSecurityContext()
                 throw e
             }

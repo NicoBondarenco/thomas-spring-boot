@@ -1,5 +1,6 @@
 package com.thomas.spring.boot.filter
 
+import ch.qos.logback.classic.Level.TRACE
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.spi.ILoggingEvent
@@ -57,7 +58,7 @@ class AuthenticationFilterTest {
 
     private fun setupLogger(name: String) {
         classLogger = LoggerFactory.getLogger(name) as Logger
-        classLogger.level = ch.qos.logback.classic.Level.TRACE
+        classLogger.level = TRACE
         loggerAppender = ListAppender<ILoggingEvent>()
         loggerAppender.context = LoggerFactory.getILoggerFactory() as LoggerContext
         loggerAppender.start()

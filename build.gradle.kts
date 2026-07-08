@@ -64,6 +64,7 @@ dependencies {
     testImplementation(testFixtures(libs.thomas.core.lib))
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.bundles.tomcat.all)
+    testImplementation(libs.bundles.spring.compile.all)
 }
 
 tasks.test {

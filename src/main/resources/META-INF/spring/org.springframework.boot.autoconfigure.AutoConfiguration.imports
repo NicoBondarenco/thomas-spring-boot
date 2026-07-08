@@ -1,0 +1,2 @@
+com.thomas.spring.boot.configuration.JacksonAutoConfiguration
+com.thomas.spring.boot.configuration.TokenDecrypterAutoConfiguration

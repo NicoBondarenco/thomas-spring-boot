@@ -1,24 +1,25 @@
 package com.thomas.spring.boot.filter
 
-import com.thomas.core.context.SessionContextHolder.currentUnity
+import com.thomas.core.context.SessionContextHolder.clearContext
 import com.thomas.logger.log.KotlinLogger
-import com.thomas.spring.boot.extension.currentUnity
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.web.filter.OncePerRequestFilter
 
-class UnityFilter : OncePerRequestFilter(), KotlinLogger by KotlinLogger.logger(UnityFilter::class) {
+class SessionContextLifecycleFilter : OncePerRequestFilter(), KotlinLogger by KotlinLogger.logger(SessionContextLifecycleFilter::class) {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val requestUnity = request.currentUnity()
-        debug { "Current unity: $requestUnity" }
-        currentUnity = requestUnity
-        filterChain.doFilter(request, response)
+        try {
+            filterChain.doFilter(request, response)
+        } finally {
+            debug { "Clearing context" }
+            clearContext()
+        }
     }
 
 }

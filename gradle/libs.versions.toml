@@ -13,7 +13,7 @@ spring-dependency = "1.1.7"
 logback-classic = "1.5.18"
 logback-kotlin = "7.0.7"
 
-thomas-core = "1.0.5"
+thomas-core = "1.0.6"
 
 tomcat-server = "11.0.22"
 
@@ -62,7 +62,9 @@ log-logback-kotlin = { module = "io.github.oshai:kotlin-logging-jvm", version.re
 thomas-core-lib = { module = "com.thomas:thomas-core", version.ref = "thomas-core" }
 thomas-logger-runtime = { module = "com.thomas:logger-runtime", version.ref = "thomas-logger" }
 
-spring-boot-web-base = { module = "org.springframework:spring-web" }
+spring-framework-web-mvc = { module = "org.springframework:spring-webmvc" }
+spring-framework-web-base = { module = "org.springframework:spring-web" }
+spring-boot-web-mvc = { module = "org.springframework.boot:spring-boot-webmvc" }
 spring-boot-jackson-base = { module = "org.springframework.boot:spring-boot-jackson" }
 spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
 spring-boot-autoconfigure-base = { module = "org.springframework.boot:spring-boot-autoconfigure" }
@@ -122,12 +124,14 @@ thomas-lib-all = [
 ]
 
 spring-boot-all = [
-  "spring-boot-web-base",
+  "spring-framework-web-base",
   "spring-boot-jackson-base",
   "spring-boot-starter-security",
 ]
 
 spring-compile-all = [
+  "spring-boot-web-mvc",
+  "spring-framework-web-mvc",
   "spring-boot-autoconfigure-base",
 ]
 

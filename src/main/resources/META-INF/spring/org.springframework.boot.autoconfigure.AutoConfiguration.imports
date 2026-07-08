@@ -1,2 +1,5 @@
+com.thomas.spring.boot.configuration.FilterAutoConfiguration
 com.thomas.spring.boot.configuration.JacksonAutoConfiguration
+com.thomas.spring.boot.configuration.LocaleResolverConfiguration
+com.thomas.spring.boot.configuration.SessionContextAutoConfiguration
 com.thomas.spring.boot.configuration.TokenDecrypterAutoConfiguration

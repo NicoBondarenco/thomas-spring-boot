@@ -1,34 +1,35 @@
-package com.thomas.spring.boot.bean
+package com.thomas.spring.boot.model.resolver
 
 import com.thomas.core.context.SessionContextHolder.currentLocale
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import jakarta.servlet.http.HttpServletRequest
 import java.util.Locale
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.http.HttpHeaders
-import org.springframework.http.server.reactive.ServerHttpRequest
-import org.springframework.web.server.ServerWebExchange
+import org.springframework.web.servlet.i18n.AbstractLocaleResolver
 
-class ContextLocaleResolverTest {
+class RequestLocaleResolverTest {
 
-    private lateinit var resolver: ContextLocaleResolver
-    private val exchange: ServerWebExchange = mockk()
-    private val request: ServerHttpRequest = mockk()
-    private val headers: HttpHeaders = mockk()
+    private lateinit var resolver: RequestLocaleResolver
+    private val request: HttpServletRequest = mockk()
 
     @BeforeEach
     fun setUp() {
         clearAllMocks()
-        resolver = ContextLocaleResolver()
+        resolver = RequestLocaleResolver()
     }
 
     @Test
     fun `ContextLocaleResolver should return default locale ROOT`() {
-        assertEquals(Locale.ROOT, resolver.defaultLocale)
+        val getter = AbstractLocaleResolver::class.memberProperties.first { it.name == "defaultLocale" }.getter
+        getter.isAccessible = true
+        assertEquals(Locale.ROOT, getter.call(resolver))
     }
 
     @Test
@@ -42,14 +43,10 @@ class ContextLocaleResolverTest {
 
     @Test
     fun `ContextLocaleResolver should set the correct currentLocale`() {
-        every { exchange.request } returns request
-        every { request.headers } returns headers
-        every { headers.acceptLanguageAsLocales } returns listOf(Locale.of("pt", "BR"))
-
+        every { request.getHeader(any()) } returns "pt-BR"
+        every { request.locale } returns Locale.of("pt", "BR")
         currentLocale = Locale.CANADA
-
-        resolver.resolveLocaleContext(exchange)
-
+        resolver.resolveLocale(request)
         assertEquals(Locale.of("pt", "BR"), currentLocale)
     }
 

@@ -10,4 +10,6 @@ internal object SpringMessageI18N : BundleResolver("strings/spring-strings") {
 
     fun filterAuthenticationFilterTokenDataInvalidSignature(): String = formattedMessage("filter.authentication-filter.token-data.invalid-signature")
 
+    fun errorExceptionMappingExceptionResponseDefaultMessage(): String = formattedMessage("error.exception-mapping.exception-response.default-message")
+
 }

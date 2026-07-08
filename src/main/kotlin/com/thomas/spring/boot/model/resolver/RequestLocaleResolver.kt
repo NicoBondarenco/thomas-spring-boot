@@ -1,4 +1,4 @@
-package com.thomas.spring.boot.bean
+package com.thomas.spring.boot.model.resolver
 
 import com.thomas.core.context.SessionContextHolder.currentLocale
 import jakarta.servlet.http.HttpServletRequest

@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.bundles.log.logback.all)
     implementation(libs.bundles.thomas.lib.all)
     implementation(libs.bundles.spring.boot.all)
+    implementation(libs.bundles.micrometer.all)
     implementation(libs.bundles.jackson.all)
     implementation(libs.bundles.moneta.all)
 

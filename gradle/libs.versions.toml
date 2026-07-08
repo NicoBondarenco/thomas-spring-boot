@@ -74,6 +74,8 @@ spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-star
 
 tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcat-server" }
 
+micrometer-context-propagation = { module = "io.micrometer:context-propagation" }
+
 jackson-core-base = { module = "tools.jackson.core:jackson-core", version.ref = "jackson-modules" }
 jackson-databind-base = { module = "tools.jackson.core:jackson-databind", version.ref = "jackson-modules" }
 jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jackson-modules" }
@@ -137,6 +139,10 @@ spring-compile-all = [
 
 tomcat-all = [
   "tomcat-embed-core",
+]
+
+micrometer-all = [
+  "micrometer-context-propagation",
 ]
 
 jackson-all = [

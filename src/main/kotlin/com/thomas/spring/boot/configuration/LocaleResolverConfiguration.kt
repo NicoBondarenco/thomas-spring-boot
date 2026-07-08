@@ -1,7 +1,7 @@
 package com.thomas.spring.boot.configuration
 
-import com.thomas.spring.boot.bean.ContextLocaleResolver
-import com.thomas.spring.boot.bean.RequestLocaleResolver
+import com.thomas.spring.boot.model.resolver.ContextLocaleResolver
+import com.thomas.spring.boot.model.resolver.RequestLocaleResolver
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration
 import org.springframework.context.annotation.Bean

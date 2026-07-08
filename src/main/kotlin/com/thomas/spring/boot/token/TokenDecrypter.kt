@@ -4,6 +4,7 @@ import com.thomas.core.model.security.SecurityUser
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataEmptySignature
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataEmptyToken
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataInvalidSignature
+import com.thomas.spring.boot.properties.TokenDecrypterProperties
 import java.security.MessageDigest
 import java.util.Base64
 import javax.crypto.Mac

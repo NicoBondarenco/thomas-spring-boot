@@ -1,4 +1,4 @@
-package com.thomas.spring.boot.token
+package com.thomas.spring.boot.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

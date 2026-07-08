@@ -7,6 +7,7 @@ import com.thomas.core.model.security.SecurityUserType
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataEmptySignature
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataEmptyToken
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataInvalidSignature
+import com.thomas.spring.boot.properties.TokenDecrypterProperties
 import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

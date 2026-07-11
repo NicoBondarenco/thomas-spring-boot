@@ -1,15 +1,18 @@
 package com.thomas.spring.boot.configuration
 
 import com.thomas.core.authorization.UnauthorizedUserException
-import com.thomas.spring.boot.extension.toExceptionResponse
+import com.thomas.spring.boot.extension.toProblemDetail
 import com.thomas.spring.boot.filter.AuthenticationFilter
-import com.thomas.spring.boot.filter.LinkIdentifierFilter
+import com.thomas.spring.boot.filter.TraceIdentifierFilter
 import com.thomas.spring.boot.filter.SessionContextLifecycleFilter
 import com.thomas.spring.boot.filter.UnityFilter
+import com.thomas.spring.boot.handler.SpringBootExceptionHandler
 import com.thomas.spring.boot.token.TokenDecrypter
+import java.net.URI
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
@@ -24,6 +27,7 @@ import tools.jackson.databind.json.JsonMapper
 @AutoConfiguration
 @EnableWebSecurity
 @EnableMethodSecurity
+@Import(SpringBootExceptionHandler::class)
 class FilterAutoConfiguration {
 
     @Bean
@@ -31,9 +35,10 @@ class FilterAutoConfiguration {
     fun restAuthenticationEntryPoint(
         jsonMapper: JsonMapper
     ): AuthenticationEntryPoint = AuthenticationEntryPoint { request, response, _ ->
+        val body = UnauthorizedUserException().toProblemDetail(URI.create(request.requestURI), UNAUTHORIZED)
         response.contentType = APPLICATION_JSON_VALUE
         response.status = UNAUTHORIZED.value()
-        response.writer.write(jsonMapper.writeValueAsString(UnauthorizedUserException().toExceptionResponse(request.requestURI)))
+        response.writer.write(jsonMapper.writeValueAsString(body))
     }
 
     @Bean
@@ -71,7 +76,7 @@ class FilterAutoConfiguration {
         AuthenticationFilter(tokenDecrypter),
         UsernamePasswordAuthenticationFilter::class.java
     ).addFilterBefore(
-        LinkIdentifierFilter(),
+        TraceIdentifierFilter(),
         AuthenticationFilter::class.java
     ).addFilterBefore(
         UnityFilter(),

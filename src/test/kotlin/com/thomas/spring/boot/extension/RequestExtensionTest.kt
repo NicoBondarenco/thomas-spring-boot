@@ -75,26 +75,26 @@ class RequestExtensionTest {
     }
 
     @Test
-    fun `Link identifier should return null if link header is not received`() {
+    fun `Trace identifier should return null if trace header is not received`() {
         val request = requestMock()
-        assertNull(request.linkIdentifier())
+        assertNull(request.traceIdentifier())
     }
 
     @Test
-    fun `Link identifier should return the identifier if link header is received`() {
+    fun `Trace identifier should return the identifier if trace header is received`() {
         val identifier = randomString()
-        val request = requestMock(linkIdentifier = identifier)
-        assertEquals(identifier, request.linkIdentifier())
+        val request = requestMock(traceIdentifier = identifier)
+        assertEquals(identifier, request.traceIdentifier())
     }
 
     private fun requestMock(
         authToken: String? = null,
         currentUnity: String? = null,
-        linkIdentifier: String? = null,
+        traceIdentifier: String? = null,
     ): HttpServletRequest = mockk<HttpServletRequest> {
         every { getHeader(AUTHORIZATION) } returns authToken
         every { getHeader("Current-Unity") } returns currentUnity
-        every { getHeader("Link-Identifier") } returns linkIdentifier
+        every { getHeader("Trace-Identifier") } returns traceIdentifier
     }
 
 }

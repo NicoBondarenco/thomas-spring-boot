@@ -6,7 +6,7 @@ import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.read.ListAppender
 import com.thomas.core.context.SessionContextHolder.clearContext
-import com.thomas.core.context.SessionContextHolder.linkIdentifier
+import com.thomas.core.context.SessionContextHolder.traceIdentifier
 import com.thomas.core.util.StringUtils.randomString
 import jakarta.servlet.DispatcherType
 import jakarta.servlet.FilterChain
@@ -23,7 +23,7 @@ import org.mockito.kotlin.whenever
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder.getContext
 
-class LinkIdentifierFilterTest {
+class TraceIdentifierFilterTest {
 
     private lateinit var classLogger: Logger
     private lateinit var loggerAppender: ListAppender<ILoggingEvent>
@@ -32,17 +32,17 @@ class LinkIdentifierFilterTest {
     private val responseMock = mock<HttpServletResponse>()
     private val chainMock = mock<FilterChain>()
 
-    private lateinit var filter: LinkIdentifierFilter
+    private lateinit var filter: TraceIdentifierFilter
 
     @BeforeEach
     fun setup() {
         clearContext()
         getContext().authentication = null
         reset(requestMock)
-        filter = LinkIdentifierFilter()
+        filter = TraceIdentifierFilter()
         doReturn(null).whenever(requestMock).getAttribute(any())
         doReturn(DispatcherType.REQUEST).whenever(requestMock).dispatcherType
-        setupLogger(LinkIdentifierFilter::class.java.name)
+        setupLogger(TraceIdentifierFilter::class.java.name)
     }
 
     private fun setupLogger(name: String) {
@@ -55,19 +55,19 @@ class LinkIdentifierFilterTest {
     }
 
     @Test
-    fun `Link Identifier filter should process identifier correctly`() {
+    fun `Trace Identifier filter should process identifier correctly`() {
         val identifier = randomString()
-        doReturn(identifier).whenever(requestMock).getHeader("Link-Identifier")
+        doReturn(identifier).whenever(requestMock).getHeader("Trace-Identifier")
         filter.doFilter(requestMock, responseMock, chainMock)
-        assertEquals(linkIdentifier, identifier)
+        assertEquals(traceIdentifier, identifier)
     }
 
     @Test
-    fun `Link Identifier filter should process identifier correctly when null`() {
-        val identifier = linkIdentifier
-        doReturn(null).whenever(requestMock).getHeader("Link-Identifier")
+    fun `Trace Identifier filter should process identifier correctly when null`() {
+        val identifier = traceIdentifier
+        doReturn(null).whenever(requestMock).getHeader("Trace-Identifier")
         filter.doFilter(requestMock, responseMock, chainMock)
-        assertEquals(linkIdentifier, identifier)
+        assertEquals(traceIdentifier, identifier)
     }
 
 }

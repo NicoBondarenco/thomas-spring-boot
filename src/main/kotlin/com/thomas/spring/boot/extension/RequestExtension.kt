@@ -5,9 +5,9 @@ import jakarta.servlet.http.HttpServletRequest
 import java.util.UUID
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 
-private const val BEARER_TOKEN_PREFIX = "Bearer "
-private const val UNITY_HEADER_TOKEN = "Current-Unity"
-private const val LINK_HEADER_TOKEN = "Link-Identifier"
+const val BEARER_TOKEN_PREFIX = "Bearer "
+const val UNITY_HEADER_TOKEN = "Current-Unity"
+const val TRACE_HEADER_TOKEN = "Trace-Identifier"
 
 fun HttpServletRequest.bearerToken(): String? = this.headerValue(AUTHORIZATION) {
     it.startsWith(BEARER_TOKEN_PREFIX)
@@ -17,7 +17,7 @@ fun HttpServletRequest.currentUnity(): UUID? = this.headerValue(UNITY_HEADER_TOK
     UUID_REGEX.matches(it)
 }?.let { UUID.fromString(it) }
 
-fun HttpServletRequest.linkIdentifier(): String? = this.headerValue(LINK_HEADER_TOKEN)
+fun HttpServletRequest.traceIdentifier(): String? = this.headerValue(TRACE_HEADER_TOKEN)
 
 private fun HttpServletRequest.headerValue(name: String, valid: (String) -> Boolean = { true }): String? {
     val header = this.getHeader(name)

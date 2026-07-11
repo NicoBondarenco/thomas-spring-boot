@@ -6,14 +6,16 @@ jdk = "25"
 target = "VERSION_25"
 kover = "0.9.1"
 sonarqube = "6.2.0.5505"
-thomas-logger = "1.0.2"
+thomas-logger = "1.0.3"
 spring-boot = "4.1.0"
 spring-dependency = "1.1.7"
+
+springdoc-openapi = "3.0.3"
 
 logback-classic = "1.5.18"
 logback-kotlin = "7.0.7"
 
-thomas-core = "1.0.6"
+thomas-core = "1.0.9"
 
 tomcat-server = "11.0.22"
 
@@ -67,10 +69,15 @@ spring-framework-web-base = { module = "org.springframework:spring-web" }
 spring-boot-web-mvc = { module = "org.springframework.boot:spring-boot-webmvc" }
 spring-boot-jackson-base = { module = "org.springframework.boot:spring-boot-jackson" }
 spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux"}
+spring-boot-starter-webclient = { module = "org.springframework.boot:spring-boot-starter-webclient" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
 spring-boot-autoconfigure-base = { module = "org.springframework.boot:spring-boot-autoconfigure" }
 spring-boot-autoconfigure-processor = { module = "org.springframework.boot:spring-boot-autoconfigure-processor" }
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+
+springdoc-openapi-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
 
 tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcat-server" }
 
@@ -129,12 +136,16 @@ spring-boot-all = [
   "spring-framework-web-base",
   "spring-boot-jackson-base",
   "spring-boot-starter-security",
+  "springdoc-openapi-webmvc-ui",
 ]
 
 spring-compile-all = [
   "spring-boot-web-mvc",
   "spring-framework-web-mvc",
   "spring-boot-autoconfigure-base",
+  "spring-boot-starter-webflux",
+  "spring-boot-starter-webclient",
+  "spring-boot-starter-validation",
 ]
 
 tomcat-all = [

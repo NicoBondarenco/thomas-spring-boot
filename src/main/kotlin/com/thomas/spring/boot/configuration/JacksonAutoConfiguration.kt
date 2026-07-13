@@ -10,12 +10,16 @@ import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomize
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 import org.springframework.http.ProblemDetail
+import org.springframework.http.codec.json.JacksonJsonDecoder
+import org.springframework.http.codec.json.JacksonJsonEncoder
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter
 import org.springframework.http.converter.json.ProblemDetailJacksonMixin
 import org.springframework.http.support.JacksonHandlerInstantiator
 import tools.jackson.core.StreamWriteFeature.WRITE_BIGDECIMAL_AS_PLAIN
 import tools.jackson.core.json.JsonFactory
 import tools.jackson.databind.DeserializationFeature.FAIL_ON_INVALID_SUBTYPE
 import tools.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
+import tools.jackson.databind.ObjectMapper
 import tools.jackson.databind.PropertyNamingStrategies.SNAKE_CASE
 import tools.jackson.databind.SerializationFeature.FAIL_ON_EMPTY_BEANS
 import tools.jackson.databind.cfg.DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS
@@ -57,7 +61,7 @@ class JacksonAutoConfiguration {
         customizers: ObjectProvider<JsonMapperBuilderCustomizer>,
         beanFactory: AutowireCapableBeanFactory,
         jsonFactoryProvider: ObjectProvider<JsonFactory>
-    ): JsonMapper = (jsonFactoryProvider.getIfAvailable()?.let { JsonMapper.builder(it) } ?: JsonMapper.builder())
+    ): JsonMapper = JsonMapper.builder(jsonFactoryProvider.getObject())
         .addModule(kotlinModule)
         .addModule(blackbirdModule)
         .addModule(moneyModule)
@@ -74,5 +78,33 @@ class JacksonAutoConfiguration {
             customizers.orderedStream().forEach { it.customize(this) }
         }
         .build()
+
+    @Bean
+    @Primary
+    @ConditionalOnMissingBean
+    fun objectMapper(
+        jsonMapper: JsonMapper
+    ): ObjectMapper = jsonMapper
+
+    @Bean
+    @Primary
+    @ConditionalOnMissingBean
+    fun jacksonJsonHttpMessageConverter(
+        jsonMapper: JsonMapper
+    ): JacksonJsonHttpMessageConverter = JacksonJsonHttpMessageConverter(jsonMapper)
+
+    @Bean
+    @Primary
+    @ConditionalOnMissingBean
+    fun jacksonJsonEncoder(
+        jsonMapper: JsonMapper,
+    ): JacksonJsonEncoder = JacksonJsonEncoder(jsonMapper)
+
+    @Bean
+    @Primary
+    @ConditionalOnMissingBean
+    fun jacksonJsonDecoder(
+        jsonMapper: JsonMapper,
+    ): JacksonJsonDecoder = JacksonJsonDecoder(jsonMapper)
 
 }

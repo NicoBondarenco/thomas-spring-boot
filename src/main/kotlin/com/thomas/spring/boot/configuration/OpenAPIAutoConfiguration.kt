@@ -47,9 +47,9 @@ class OpenAPIAutoConfiguration {
                     SecurityScheme()
                         .name(securityProperties.name)
                         .type(SecurityScheme.Type.HTTP)
-                        .scheme("bearer")
-                        .bearerFormat("JWT")
-                        .description("Insira seu token JWT gerado pelo Keycloak/SSO.")
+                        .scheme(securityProperties.scheme)
+                        .bearerFormat(securityProperties.format)
+                        .description(securityProperties.description)
                 )
         )
     }

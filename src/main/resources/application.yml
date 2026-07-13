@@ -1,19 +1,74 @@
 spring:
+  threads:
+    virtual:
+      enabled: true
   sleuth:
     sampler:
       probability: 1.0
+  thomas:
+    token:
+      decrypter:
+        encryption-algorithm: "HmacSHA256"
+    pagination:
+      default-page-number: 1
+      default-page-size: 20
+    observability:
+      application: ${spring.application.name}
+      instance: "${spring.thomas.observability.application}-${random.uuid}"
+    openapi:
+      info:
+        version: "0.0.1-SNAPSHOT"
+        title: "T.H.O.M.A.S. Backend Application"
+        description: "T.H.O.M.A.S. Backend Application REST Endpoints Documentation"
+      contact:
+        name: "Nico Bondarenco"
+        email: "nico.bondarenco@thomas-project.com.br"
+        url: "https://github.com/NicoBondarenco"
+      security:
+        name: "Internal Authentication"
+        type: "HTTP"
+        scheme: "bearer"
+        format: "Signed Base64"
+        description: "Signed Base64 internal token"
+      group:
+        open: "Public"
+        secured: "Private"
+    webclient:
+      client-connection-timeout: 5000
+      client-response-timeout: 15000
+      client-read-timeout: 15000
+      client-write-timeout: 15000
+      client-payload-size: 5242880
+      client-wiretap-enabled: true
+      connection-provider-name: "default-webclient-connection-provider"
+      provider-max-connections: 100
+      pending-acquire-count: 200
+      pending-acquire-timeout: 5000
+      max-idle-time: 30000
+    restclient:
+      max-pool-connections: 500
+      max-route-connections: 250
+      client-connection-timeout: 3000
+      client-read-timeout: 3000
+      connection-idle-timeout: 10000
+      time-to-live: 10000
+      request-connection-timeout: 30000
+      request-response-timeout: 60000
 
 management:
   endpoints:
     web:
       exposure:
-        include: "health, prometheus"
-  metrics:
-    tags:
-      application: ${spring.thomas.observability.application}
+        include: "health, prometheus, info"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
   tracing:
     sampling:
       probability: 1.0
   otlp:
     tracing:
-      endpoint: ${OTLP_ENDPOINT:http://localhost:4318/v1/traces}
+      endpoint: ${OTLP_ENDPOINT:"http://localhost:4318/v1/traces"}

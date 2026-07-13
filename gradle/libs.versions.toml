@@ -6,23 +6,25 @@ jdk = "25"
 target = "VERSION_25"
 kover = "0.9.1"
 sonarqube = "6.2.0.5505"
-thomas-logger = "1.0.4"
+thomas-logger = "1.0.5"
 spring-boot = "4.1.0"
 spring-dependency = "1.1.7"
 
 springdoc-openapi = "3.0.3"
 
-logback-classic = "1.5.18"
+logback-classic = "1.5.34"
 logback-kotlin = "7.0.7"
 logback-encoder = "9.0"
 
-thomas-core = "1.0.10"
+thomas-core = "1.0.11"
 
 tomcat-server = "11.0.22"
 
 jackson-modules = "3.2.0"
 
 moneta-modules = "1.4.5"
+
+apache-client5 = "5.6.2"
 
 junit-jupiter = "6.0.3"
 
@@ -35,6 +37,8 @@ mockk-kotlin = "1.14.3"
 system-stubs = "2.1.8"
 
 skyscreamer-jsonassert = "1.5.3"
+
+wiremock-version = "3.13.2"
 
 [plugins]
 kotlin-lang = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -71,7 +75,9 @@ spring-framework-web-base = { module = "org.springframework:spring-web" }
 spring-boot-web-mvc = { module = "org.springframework.boot:spring-boot-webmvc" }
 spring-boot-jackson-base = { module = "org.springframework.boot:spring-boot-jackson" }
 spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
-spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux"}
+spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-restclient = { module = "org.springframework.boot:spring-boot-starter-restclient" }
 spring-boot-starter-webclient = { module = "org.springframework.boot:spring-boot-starter-webclient" }
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
@@ -97,6 +103,8 @@ jackson-datatype-javaxmoney = { module = "tools.jackson.datatype:jackson-datatyp
 
 moneta-core-base = { module = "org.javamoney.moneta:moneta-core", version.ref = "moneta-modules" }
 
+apache-http-client-client5 = { module = "org.apache.httpcomponents.client5:httpclient5", version.ref = "apache-client5" }
+
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter" }
@@ -112,6 +120,10 @@ system-stubs-core = { module = "uk.org.webcompere:system-stubs-core", version.re
 system-stubs-jupiter = { module = "uk.org.webcompere:system-stubs-jupiter", version.ref = "system-stubs" }
 
 skyscreamer-jsonassert = { module = "org.skyscreamer:jsonassert", version.ref = "skyscreamer-jsonassert" }
+
+wiremock-test = { module = "org.wiremock:wiremock", version.ref = "wiremock-version"}
+wiremock-jetty12 = { module = "org.wiremock:wiremock-jetty12", version.ref = "wiremock-version"}
+wiremock-standalone = { module = "org.wiremock:wiremock-standalone", version.ref = "wiremock-version"}
 
 [bundles]
 kotlin-stdlib-all = [
@@ -152,8 +164,21 @@ spring-compile-all = [
   "spring-framework-web-mvc",
   "spring-boot-autoconfigure-base",
   "spring-boot-starter-webflux",
+  "spring-boot-starter-web",
+  "spring-boot-starter-restclient",
   "spring-boot-starter-webclient",
   "spring-boot-starter-validation",
+  "apache-http-client-client5",
+]
+
+spring-test-all = [
+  "spring-boot-starter-test",
+]
+
+wiremock-all = [
+#  "wiremock-test",
+#  "wiremock-jetty12",
+  "wiremock-standalone",
 ]
 
 tomcat-all = [

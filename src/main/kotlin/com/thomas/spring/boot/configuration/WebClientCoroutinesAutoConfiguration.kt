@@ -68,11 +68,12 @@ class WebClientCoroutinesAutoConfiguration {
     @ConditionalOnMissingBean
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     fun exchangeStrategies(
-        jsonMapper: JsonMapper,
-        properties: WebClientProperties
+        properties: WebClientProperties,
+        jacksonJsonEncoder: JacksonJsonEncoder,
+        jacksonJsonDecoder: JacksonJsonDecoder,
     ): ExchangeStrategies = ExchangeStrategies.builder().codecs { configurer ->
-        configurer.defaultCodecs().jacksonJsonEncoder(JacksonJsonEncoder(jsonMapper))
-        configurer.defaultCodecs().jacksonJsonDecoder(JacksonJsonDecoder(jsonMapper))
+        configurer.defaultCodecs().jacksonJsonEncoder(jacksonJsonEncoder)
+        configurer.defaultCodecs().jacksonJsonDecoder(jacksonJsonDecoder)
         configurer.customCodecs().register(FormHttpMessageWriter())
         configurer.customCodecs().register(MultipartHttpMessageWriter())
         configurer.defaultCodecs().maxInMemorySize(properties.clientPayloadSize)

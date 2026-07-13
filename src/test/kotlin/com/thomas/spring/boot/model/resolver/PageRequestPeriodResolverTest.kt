@@ -28,7 +28,7 @@ import org.springframework.web.method.support.ModelAndViewContainer
 
 class PageRequestPeriodResolverTest {
 
-    private val properties = PaginationProperties()
+    private val properties = PaginationProperties(0, 10)
     private lateinit var resolver: PageRequestPeriodResolver
 
     private val parameter: MethodParameter = mockk()

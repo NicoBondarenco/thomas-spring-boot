@@ -6,7 +6,7 @@ jdk = "25"
 target = "VERSION_25"
 kover = "0.9.1"
 sonarqube = "6.2.0.5505"
-thomas-logger = "1.0.3"
+thomas-logger = "1.0.4"
 spring-boot = "4.1.0"
 spring-dependency = "1.1.7"
 
@@ -14,8 +14,9 @@ springdoc-openapi = "3.0.3"
 
 logback-classic = "1.5.18"
 logback-kotlin = "7.0.7"
+logback-encoder = "9.0"
 
-thomas-core = "1.0.9"
+thomas-core = "1.0.10"
 
 tomcat-server = "11.0.22"
 
@@ -60,6 +61,7 @@ kotlinx-serialization-cbor = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 log-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
 log-logback-kotlin = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "logback-kotlin" }
+logstash-logback-encoder = { module = "net.logstash.logback:logstash-logback-encoder", version.ref = "logback-encoder" }
 
 thomas-core-lib = { module = "com.thomas:thomas-core", version.ref = "thomas-core" }
 thomas-logger-runtime = { module = "com.thomas:logger-runtime", version.ref = "thomas-logger" }
@@ -72,6 +74,7 @@ spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-
 spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux"}
 spring-boot-starter-webclient = { module = "org.springframework.boot:spring-boot-starter-webclient" }
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
 spring-boot-autoconfigure-base = { module = "org.springframework.boot:spring-boot-autoconfigure" }
 spring-boot-autoconfigure-processor = { module = "org.springframework.boot:spring-boot-autoconfigure-processor" }
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
@@ -82,6 +85,9 @@ springdoc-openapi-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starte
 tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcat-server" }
 
 micrometer-context-propagation = { module = "io.micrometer:context-propagation" }
+micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
+micrometer-tracing-bridge = { module = "io.micrometer:micrometer-tracing-bridge-otel" }
+opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp" }
 
 jackson-core-base = { module = "tools.jackson.core:jackson-core", version.ref = "jackson-modules" }
 jackson-databind-base = { module = "tools.jackson.core:jackson-databind", version.ref = "jackson-modules" }
@@ -125,6 +131,7 @@ kotlinx-modules-all = [
 log-logback-all = [
   "log-logback-classic",
   "log-logback-kotlin",
+  "logstash-logback-encoder",
 ]
 
 thomas-lib-all = [
@@ -137,6 +144,7 @@ spring-boot-all = [
   "spring-boot-jackson-base",
   "spring-boot-starter-security",
   "springdoc-openapi-webmvc-ui",
+  "spring-boot-starter-actuator",
 ]
 
 spring-compile-all = [
@@ -154,6 +162,9 @@ tomcat-all = [
 
 micrometer-all = [
   "micrometer-context-propagation",
+  "micrometer-registry-prometheus",
+  "micrometer-tracing-bridge",
+  "opentelemetry-exporter-otlp",
 ]
 
 jackson-all = [

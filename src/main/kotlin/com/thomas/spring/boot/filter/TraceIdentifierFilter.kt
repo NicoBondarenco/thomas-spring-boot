@@ -1,11 +1,13 @@
 package com.thomas.spring.boot.filter
 
+import com.thomas.core.context.SessionContextHolder.scopeIdentifier
 import com.thomas.core.context.SessionContextHolder.traceIdentifier
 import com.thomas.logger.log.KotlinLogger
 import com.thomas.spring.boot.extension.traceIdentifier
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.MDC
 import org.springframework.web.filter.OncePerRequestFilter
 
 class TraceIdentifierFilter : OncePerRequestFilter(), KotlinLogger by KotlinLogger.logger(TraceIdentifierFilter::class) {
@@ -18,6 +20,8 @@ class TraceIdentifierFilter : OncePerRequestFilter(), KotlinLogger by KotlinLogg
         val identifier = request.traceIdentifier()
         debug { "Trace identifier received: $identifier" }
         identifier?.apply { traceIdentifier = this }
+        MDC.put("traceId", traceIdentifier)
+        MDC.put("scopeId", scopeIdentifier)
         filterChain.doFilter(request, response)
     }
 

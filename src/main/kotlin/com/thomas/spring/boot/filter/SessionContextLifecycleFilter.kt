@@ -5,6 +5,7 @@ import com.thomas.logger.log.KotlinLogger
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.MDC
 import org.springframework.web.filter.OncePerRequestFilter
 
 class SessionContextLifecycleFilter : OncePerRequestFilter(), KotlinLogger by KotlinLogger.logger(SessionContextLifecycleFilter::class) {
@@ -18,6 +19,7 @@ class SessionContextLifecycleFilter : OncePerRequestFilter(), KotlinLogger by Ko
             filterChain.doFilter(request, response)
         } finally {
             debug { "Clearing context" }
+            MDC.clear()
             clearContext()
         }
     }

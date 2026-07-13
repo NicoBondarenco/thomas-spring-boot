@@ -7,6 +7,7 @@ import kotlinx.kover.gradle.plugin.dsl.GroupingEntityType.APPLICATION
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.utils.extendsFrom
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -45,6 +46,13 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+val testDependency by configurations.creating
+
+configurations {
+    testImplementation { extendsFrom(testDependency) }
+    testFixturesImplementation { extendsFrom(testDependency) }
+}
+
 dependencies {
     annotationProcessor(libs.spring.boot.autoconfigure.processor)
     annotationProcessor(libs.spring.boot.configuration.processor)
@@ -61,12 +69,12 @@ dependencies {
     compileOnly(libs.bundles.tomcat.all)
     compileOnly(libs.bundles.spring.compile.all)
 
-    testImplementation(libs.bundles.junit.all)
-    testImplementation(testFixtures(libs.thomas.core.lib))
-    testImplementation(libs.bundles.tomcat.all)
-    testImplementation(libs.bundles.spring.compile.all)
-    testImplementation(libs.bundles.spring.test.all)
-    testImplementation(libs.bundles.wiremock.all)
+    testDependency(libs.bundles.junit.all)
+    testDependency(testFixtures(libs.thomas.core.lib))
+    testDependency(libs.bundles.tomcat.all)
+    testDependency(libs.bundles.spring.compile.all)
+    testDependency(libs.bundles.spring.test.all)
+    testDependency(libs.bundles.wiremock.all)
 }
 
 tasks.test {

@@ -15,18 +15,25 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.http.HttpStatus.UNAUTHORIZED
+import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
+import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.server.SecurityWebFilterChain
+import org.springframework.security.web.server.ServerAuthenticationEntryPoint
+import reactor.core.publisher.Mono
 import tools.jackson.databind.json.JsonMapper
 
 @AutoConfiguration
-@EnableWebSecurity
-@EnableMethodSecurity
+@EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
 @Import(SpringBootExceptionHandler::class)
 class FilterAutoConfiguration {
 
@@ -34,22 +41,21 @@ class FilterAutoConfiguration {
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
     fun restAuthenticationEntryPoint(
         jsonMapper: JsonMapper
-    ): AuthenticationEntryPoint = AuthenticationEntryPoint { request, response, _ ->
-        val body = UnauthorizedUserException().toProblemDetail(URI.create(request.requestURI), UNAUTHORIZED)
-        response.contentType = APPLICATION_JSON_VALUE
-        response.status = UNAUTHORIZED.value()
-        response.writer.write(jsonMapper.writeValueAsString(body))
+    ): ServerAuthenticationEntryPoint = ServerAuthenticationEntryPoint { exchange, _ ->
+        val body = UnauthorizedUserException().toProblemDetail(exchange.request.uri, UNAUTHORIZED)
+        val json = jsonMapper.writeValueAsBytes(body)
+        exchange.response.statusCode = UNAUTHORIZED
+        exchange.response.headers.contentType = APPLICATION_JSON
+        exchange.response.writeWith(Mono.just(exchange.response.bufferFactory().wrap(json)))
     }
 
     @Bean
     @Suppress("SpringJavaInjectionPointsAutowiringInspection")
-    fun securityFilterChain(
-        http: HttpSecurity,
+    fun securityWebFilterChain(
+        http: ServerHttpSecurity,
         tokenDecrypter: TokenDecrypter,
-        authenticationEntryPoint: AuthenticationEntryPoint,
-    ): SecurityFilterChain = http.cors {
-        it.disable()
-    }.sessionManagement {
+        authenticationEntryPoint: ServerAuthenticationEntryPoint,
+    ): SecurityWebFilterChain = http.cors {
         it.disable()
     }.csrf {
         it.disable()
@@ -61,17 +67,17 @@ class FilterAutoConfiguration {
         it.disable()
     }.exceptionHandling {
         it.authenticationEntryPoint(authenticationEntryPoint)
-    }.authorizeHttpRequests {
-        it.requestMatchers("/public/**").permitAll()
-            .requestMatchers("/actuator/**").permitAll()
-            .requestMatchers("/v3/api-docs/**").permitAll()
-            .requestMatchers("/configuration/**").permitAll()
-            .requestMatchers("/swagger-resources/**").permitAll()
-            .requestMatchers("/swagger-resources").permitAll()
-            .requestMatchers("/swagger-ui/**").permitAll()
-            .requestMatchers("/swagger-ui.html").permitAll()
-            .requestMatchers("/webjars/**").permitAll()
-            .anyRequest().authenticated()
+    }.authorizeExchange {
+        it.pathMatchers("/public/**").permitAll()
+            .pathMatchers("/actuator/**").permitAll()
+            .pathMatchers("/v3/api-docs/**").permitAll()
+            .pathMatchers("/configuration/**").permitAll()
+            .pathMatchers("/swagger-resources/**").permitAll()
+            .pathMatchers("/swagger-resources").permitAll()
+            .pathMatchers("/swagger-ui/**").permitAll()
+            .pathMatchers("/swagger-ui.html").permitAll()
+            .pathMatchers("/webjars/**").permitAll()
+            .anyExchange().authenticated()
     }.addFilterBefore(
         AuthenticationFilter(tokenDecrypter),
         UsernamePasswordAuthenticationFilter::class.java

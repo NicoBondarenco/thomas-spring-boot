@@ -5,8 +5,8 @@ import com.thomas.core.model.pagination.PageSort
 import com.thomas.core.model.pagination.PageSortDirection
 import kotlin.reflect.KClass
 import org.springframework.core.MethodParameter
-import org.springframework.web.context.request.NativeWebRequest
-import org.springframework.web.method.support.HandlerMethodArgumentResolver
+import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver  // ← era .method.support
+import org.springframework.web.server.ServerWebExchange
 
 abstract class PageRequestDataResolver<T : PageRequestData>(
     private val klass: KClass<T>,
@@ -22,23 +22,23 @@ abstract class PageRequestDataResolver<T : PageRequestData>(
 
     override fun supportsParameter(parameter: MethodParameter): Boolean = parameter.parameterType == klass.java
 
-    protected fun pageNumber(request: NativeWebRequest) = parameterValue(
-        request,
+    protected fun pageNumber(exchange: ServerWebExchange) = parameterValue(
+        exchange,
         PAGE_NUMBER_PARAM,
         defaultPageNumber,
     )
 
-    protected fun pageSize(request: NativeWebRequest) = parameterValue(
-        request,
+    protected fun pageSize(exchange: ServerWebExchange) = parameterValue(
+        exchange,
         PAGE_SIZE_PARAM,
         defaultPageSize,
     )
 
     private fun parameterValue(
-        request: NativeWebRequest,
+        exchange: ServerWebExchange,
         attr: String,
         default: Long,
-    ): Long = request.getParameter(attr)?.let {
+    ): Long = exchange.request.queryParams.getFirst(attr)?.let {
         parameterNumber(attr, it)
     } ?: default
 
@@ -51,9 +51,9 @@ abstract class PageRequestDataResolver<T : PageRequestData>(
         throw RequestParameterException(parameter, value)
     }
 
-    protected fun sortList(request: NativeWebRequest): List<PageSort> = request.getParameterValues(
-        SORT_ORDER_PARAM
-    )?.map {
+    protected fun sortList(
+        exchange: ServerWebExchange
+    ): List<PageSort> = exchange.request.queryParams[SORT_ORDER_PARAM]?.map {
         handleSortParameter(it)
     } ?: listOf()
 

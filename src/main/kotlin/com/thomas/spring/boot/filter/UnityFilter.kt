@@ -3,22 +3,18 @@ package com.thomas.spring.boot.filter
 import com.thomas.core.context.SessionContextHolder.currentUnity
 import com.thomas.logger.log.KotlinLogger
 import com.thomas.spring.boot.extension.currentUnity
-import jakarta.servlet.FilterChain
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
-import org.springframework.web.filter.OncePerRequestFilter
+import org.springframework.web.server.ServerWebExchange
+import org.springframework.web.server.WebFilter
+import org.springframework.web.server.WebFilterChain
+import reactor.core.publisher.Mono
 
-class UnityFilter : OncePerRequestFilter(), KotlinLogger by KotlinLogger.logger(UnityFilter::class) {
+class UnityFilter : WebFilter, KotlinLogger by KotlinLogger.logger(UnityFilter::class) {
 
-    override fun doFilterInternal(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        filterChain: FilterChain
-    ) {
-        val requestUnity = request.currentUnity()
+    override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
+        val requestUnity = exchange.request.currentUnity()
         debug { "Current unity: $requestUnity" }
         currentUnity = requestUnity
-        filterChain.doFilter(request, response)
+        return chain.filter(exchange)
     }
 
 }

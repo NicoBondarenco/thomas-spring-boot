@@ -95,12 +95,10 @@ dependencies {
     implementation(libs.bundles.jackson.all)
     implementation(libs.bundles.moneta.all)
 
-    compileOnly(libs.bundles.tomcat.all)
     compileOnly(libs.bundles.spring.compile.all)
 
     testDependency(libs.bundles.junit.all)
     testDependency(testFixtures(libs.thomas.core.lib))
-    testDependency(libs.bundles.tomcat.all)
     testDependency(libs.bundles.spring.compile.all)
     testDependency(libs.bundles.spring.test.all)
     testDependency(libs.bundles.wiremock.all)

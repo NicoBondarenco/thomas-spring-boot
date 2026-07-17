@@ -4,25 +4,21 @@ import com.thomas.core.context.SessionContextHolder.scopeIdentifier
 import com.thomas.core.context.SessionContextHolder.traceIdentifier
 import com.thomas.logger.log.KotlinLogger
 import com.thomas.spring.boot.extension.traceIdentifier
-import jakarta.servlet.FilterChain
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.MDC
-import org.springframework.web.filter.OncePerRequestFilter
+import org.springframework.web.server.ServerWebExchange
+import org.springframework.web.server.WebFilter
+import org.springframework.web.server.WebFilterChain
+import reactor.core.publisher.Mono
 
-class TraceIdentifierFilter : OncePerRequestFilter(), KotlinLogger by KotlinLogger.logger(TraceIdentifierFilter::class) {
+class TraceIdentifierFilter : WebFilter, KotlinLogger by KotlinLogger.logger(TraceIdentifierFilter::class) {
 
-    override fun doFilterInternal(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        filterChain: FilterChain
-    ) {
-        val identifier = request.traceIdentifier()
+    override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
+        val identifier = exchange.request.traceIdentifier()
         debug { "Trace identifier received: $identifier" }
         identifier?.apply { traceIdentifier = this }
         MDC.put("traceId", traceIdentifier)
         MDC.put("scopeId", scopeIdentifier)
-        filterChain.doFilter(request, response)
+        return chain.filter(exchange)
     }
 
 }

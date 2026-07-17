@@ -5,18 +5,18 @@ import com.thomas.spring.boot.model.resolver.PageRequestResolver
 import com.thomas.spring.boot.properties.PaginationProperties
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.context.properties.EnableConfigurationProperties
-import org.springframework.web.method.support.HandlerMethodArgumentResolver
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.web.reactive.config.WebFluxConfigurer
+import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer
 
 @AutoConfiguration
 @EnableConfigurationProperties(PaginationProperties::class)
 class ArgumentResolversAutoConfiguration(
     private val paginationProperties: PaginationProperties
-) : WebMvcConfigurer {
+) : WebFluxConfigurer {
 
-    override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
-        resolvers.add(PageRequestPeriodResolver(paginationProperties.defaultPageNumber, paginationProperties.defaultPageSize))
-        resolvers.add(PageRequestResolver(paginationProperties.defaultPageNumber, paginationProperties.defaultPageSize))
+    override fun configureArgumentResolvers(configurer: ArgumentResolverConfigurer) {
+        configurer.addCustomResolver(PageRequestPeriodResolver(paginationProperties.defaultPageNumber, paginationProperties.defaultPageSize))
+        configurer.addCustomResolver(PageRequestResolver(paginationProperties.defaultPageNumber, paginationProperties.defaultPageSize))
     }
 
 }

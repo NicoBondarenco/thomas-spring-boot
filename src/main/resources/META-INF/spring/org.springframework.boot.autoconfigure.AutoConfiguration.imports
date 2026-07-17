@@ -5,7 +5,6 @@ com.thomas.spring.boot.configuration.LocaleResolverConfiguration
 com.thomas.spring.boot.configuration.ObservabilityAutoConfiguration
 com.thomas.spring.boot.configuration.OpenAPIAutoConfiguration
 com.thomas.spring.boot.configuration.RegistrationAutoConfiguration
-com.thomas.spring.boot.configuration.RestClientAutoConfiguration
 com.thomas.spring.boot.configuration.SessionContextAutoConfiguration
 com.thomas.spring.boot.configuration.TokenDecrypterAutoConfiguration
 com.thomas.spring.boot.configuration.WebClientCoroutinesAutoConfiguration

@@ -2,9 +2,9 @@ package com.thomas.spring.boot.model.resolver
 
 import com.thomas.core.model.pagination.PageRequest
 import org.springframework.core.MethodParameter
-import org.springframework.web.bind.support.WebDataBinderFactory
-import org.springframework.web.context.request.NativeWebRequest
-import org.springframework.web.method.support.ModelAndViewContainer
+import org.springframework.web.reactive.BindingContext
+import org.springframework.web.server.ServerWebExchange
+import reactor.core.publisher.Mono
 
 class PageRequestResolver(
     defaultPageNumber: Long,
@@ -17,13 +17,14 @@ class PageRequestResolver(
 
     override fun resolveArgument(
         parameter: MethodParameter,
-        mavContainer: ModelAndViewContainer?,
-        webRequest: NativeWebRequest,
-        binderFactory: WebDataBinderFactory?
-    ): Any = PageRequest(
-        pageNumber = pageNumber(webRequest),
-        pageSize = pageSize(webRequest),
-        pageSort = sortList(webRequest),
+        bindingContext: BindingContext,
+        exchange: ServerWebExchange
+    ): Mono<Any> = Mono.just(
+        PageRequest(
+            pageNumber = pageNumber(exchange),
+            pageSize = pageSize(exchange),
+            pageSort = sortList(exchange),
+        )
     )
 
 }

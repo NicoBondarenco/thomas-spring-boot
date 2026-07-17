@@ -75,14 +75,10 @@ logstash-logback-encoder = { module = "net.logstash.logback:logstash-logback-enc
 thomas-core-lib = { module = "com.thomas:thomas-core", version.ref = "thomas-core" }
 thomas-logger-runtime = { module = "com.thomas:logger-runtime", version.ref = "thomas-logger" }
 
-spring-framework-web-mvc = { module = "org.springframework:spring-webmvc" }
 spring-framework-web-base = { module = "org.springframework:spring-web" }
-spring-boot-web-mvc = { module = "org.springframework.boot:spring-boot-webmvc" }
 spring-boot-jackson-base = { module = "org.springframework.boot:spring-boot-jackson" }
 spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
 spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
-spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
-spring-boot-starter-restclient = { module = "org.springframework.boot:spring-boot-starter-restclient" }
 spring-boot-starter-webclient = { module = "org.springframework.boot:spring-boot-starter-webclient" }
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
@@ -91,9 +87,7 @@ spring-boot-autoconfigure-processor = { module = "org.springframework.boot:sprin
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 
-springdoc-openapi-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi" }
-
-tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcat-server" }
+springdoc-openapi-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "springdoc-openapi" }
 
 micrometer-context-propagation = { module = "io.micrometer:context-propagation" }
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus" }
@@ -161,17 +155,13 @@ spring-boot-all = [
   "spring-framework-web-base",
   "spring-boot-jackson-base",
   "spring-boot-starter-security",
-  "springdoc-openapi-webmvc-ui",
+  "springdoc-openapi-webflux-ui",
   "spring-boot-starter-actuator",
 ]
 
 spring-compile-all = [
-  "spring-boot-web-mvc",
-  "spring-framework-web-mvc",
   "spring-boot-autoconfigure-base",
   "spring-boot-starter-webflux",
-  "spring-boot-starter-web",
-  "spring-boot-starter-restclient",
   "spring-boot-starter-webclient",
   "spring-boot-starter-validation",
   "apache-http-client-client5",
@@ -185,10 +175,6 @@ wiremock-all = [
 #  "wiremock-test",
 #  "wiremock-jetty12",
   "wiremock-standalone",
-]
-
-tomcat-all = [
-  "tomcat-embed-core",
 ]
 
 micrometer-all = [

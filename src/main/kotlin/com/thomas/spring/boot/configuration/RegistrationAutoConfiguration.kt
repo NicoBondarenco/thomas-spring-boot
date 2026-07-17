@@ -1,20 +1,20 @@
 package com.thomas.spring.boot.configuration
 
 import com.thomas.spring.boot.mapping.QueryMapping
-import com.thomas.spring.boot.mapping.QueryMappingJson
 import com.thomas.spring.boot.mapping.QueryRequestCondition
 import java.lang.reflect.Method
 import org.springframework.boot.autoconfigure.AutoConfiguration
-import org.springframework.boot.webmvc.autoconfigure.WebMvcRegistrations
+import org.springframework.boot.webflux.autoconfigure.WebFluxRegistrations
 import org.springframework.core.annotation.AnnotatedElementUtils
-import org.springframework.web.servlet.mvc.condition.RequestCondition
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
+import org.springframework.web.reactive.result.condition.RequestCondition
+import org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerMapping
+
 
 @AutoConfiguration
-class RegistrationAutoConfiguration : WebMvcRegistrations {
+class RegistrationAutoConfiguration : WebFluxRegistrations {
 
     companion object {
-        private val QUERY_MAPPING_ANNOTATIONS = setOf(QueryMappingJson::class.java, QueryMapping::class.java)
+        private val QUERY_MAPPING_ANNOTATIONS = setOf(QueryMapping::class.java)
     }
 
     override fun getRequestMappingHandlerMapping(): RequestMappingHandlerMapping {

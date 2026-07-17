@@ -1,5 +1,6 @@
 package com.thomas.spring.boot.configuration
 
+import com.thomas.spring.boot.handler.RestClientErrorHandler
 import com.thomas.spring.boot.properties.RestClientProperties
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import org.apache.hc.client5.http.config.ConnectionConfig
@@ -102,6 +103,14 @@ class RestClientAutoConfiguration {
                 execution.execute(request, body)
             }
         }
+        builder.defaultStatusHandler(RestClientErrorHandler())
     }
+
+    @Bean
+    @Primary
+    @ConditionalOnMissingBean
+    fun restClient(
+        builder: RestClient.Builder
+    ): RestClient = builder.build()
 
 }

@@ -1,7 +1,7 @@
 package com.thomas.spring.boot.configuration
 
-import com.thomas.core.context.SessionContextHolder
-import com.thomas.spring.boot.extension.TRACE_HEADER_TOKEN
+import com.thomas.spring.boot.handler.errorHandler
+import com.thomas.spring.boot.handler.isStatusError
 import com.thomas.spring.boot.properties.WebClientProperties
 import io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS
 import io.netty.handler.timeout.ReadTimeoutHandler
@@ -18,6 +18,7 @@ import org.springframework.boot.webclient.autoconfigure.WebClientAutoConfigurati
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
 import org.springframework.http.HttpHeaders.ACCEPT
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.http.client.reactive.ClientHttpConnector
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
@@ -25,11 +26,11 @@ import org.springframework.http.codec.FormHttpMessageWriter
 import org.springframework.http.codec.json.JacksonJsonDecoder
 import org.springframework.http.codec.json.JacksonJsonEncoder
 import org.springframework.http.codec.multipart.MultipartHttpMessageWriter
+import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.netty.http.client.HttpClient
 import reactor.netty.resources.ConnectionProvider
-import tools.jackson.databind.json.JsonMapper
 
 @AutoConfiguration(before = [WebClientAutoConfiguration::class, CodecsAutoConfiguration::class])
 @ConditionalOnClass(WebClient::class)
@@ -89,6 +90,7 @@ class WebClientCoroutinesAutoConfiguration {
         builder.clientConnector(httpClient)
         builder.exchangeStrategies(exchangeStrategies)
         builder.defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
+        builder.defaultStatusHandler(HttpStatusCode::isStatusError, ClientResponse::errorHandler)
     }
 
 }

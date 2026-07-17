@@ -6,7 +6,7 @@ jdk = "25"
 target = "VERSION_25"
 kover = "0.9.1"
 sonarqube = "6.2.0.5505"
-thomas-logger = "1.0.5"
+thomas-logger = "1.0.6"
 spring-boot = "4.1.0"
 spring-dependency = "1.1.7"
 
@@ -21,6 +21,11 @@ thomas-core = "1.0.11"
 tomcat-server = "11.0.22"
 
 jackson-modules = "3.2.0"
+jackson2-annotations = "2.22"
+jackson2-core = "2.22.1"
+jackson2-databind = "2.22.1"
+jackson2-yaml = "2.22.1"
+jackson2-jsr310 = "2.22.1"
 
 moneta-modules = "1.4.5"
 
@@ -97,6 +102,7 @@ opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporte
 
 jackson-core-base = { module = "tools.jackson.core:jackson-core", version.ref = "jackson-modules" }
 jackson-databind-base = { module = "tools.jackson.core:jackson-databind", version.ref = "jackson-modules" }
+jackson-databind-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson2-annotations" }
 jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin", version.ref = "jackson-modules" }
 jackson-module-blackbird = { module = "tools.jackson.module:jackson-module-blackbird", version.ref = "jackson-modules" }
 jackson-datatype-javaxmoney = { module = "tools.jackson.datatype:jackson-datatype-javax-money", version.ref = "jackson-modules" }
@@ -195,6 +201,7 @@ micrometer-all = [
 jackson-all = [
   "jackson-core-base",
   "jackson-databind-base",
+  "jackson-databind-annotations",
   "jackson-module-kotlin",
   "jackson-module-blackbird",
   "jackson-datatype-javaxmoney",

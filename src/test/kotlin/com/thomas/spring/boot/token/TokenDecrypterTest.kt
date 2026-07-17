@@ -4,6 +4,7 @@ import com.thomas.core.model.security.SecurityRole
 import com.thomas.core.model.security.SecurityUnity
 import com.thomas.core.model.security.SecurityUser
 import com.thomas.core.model.security.SecurityUserType
+import com.thomas.spring.boot.extension.EMPTY_STRING
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataEmptySignature
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataEmptyToken
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataInvalidSignature
@@ -70,7 +71,7 @@ class TokenDecrypterTest {
 
     @Test
     fun `Decrypt security user with empty token`() {
-        val token = ""
+        val token = EMPTY_STRING
         val properties = TokenDecrypterProperties(encryptionAlgorithm, encryptionKey)
         val decrypter = TokenDecrypter(properties)
         val exception = assertThrows<TokenDecryptionException> { decrypter.decrypt(token) }

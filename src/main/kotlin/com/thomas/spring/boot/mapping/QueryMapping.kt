@@ -2,20 +2,14 @@ package com.thomas.spring.boot.mapping
 
 import com.thomas.spring.boot.extension.EMPTY_STRING
 import org.springframework.core.annotation.AliasFor
-import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod.DELETE
 
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
-@RequestMapping(
-    method = [DELETE],
-    produces = [APPLICATION_JSON_VALUE],
-    consumes = [APPLICATION_JSON_VALUE],
-)
-annotation class DeleteMappingJson(
+@RequestMapping
+annotation class QueryMapping(
     @get:AliasFor(annotation = RequestMapping::class)
     val value: Array<String> = [],
     @get:AliasFor(annotation = RequestMapping::class)
@@ -26,4 +20,8 @@ annotation class DeleteMappingJson(
     val params: Array<String> = [],
     @get:AliasFor(annotation = RequestMapping::class)
     val headers: Array<String> = [],
+    @get:AliasFor(annotation = RequestMapping::class)
+    val consumes: Array<String> = [],
+    @get:AliasFor(annotation = RequestMapping::class)
+    val produces: Array<String> = [],
 )

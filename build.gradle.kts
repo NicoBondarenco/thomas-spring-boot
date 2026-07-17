@@ -7,7 +7,6 @@ import kotlinx.kover.gradle.plugin.dsl.GroupingEntityType.APPLICATION
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.gradle.utils.extendsFrom
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -51,6 +50,36 @@ val testDependency by configurations.creating
 configurations {
     testImplementation { extendsFrom(testDependency) }
     testFixturesImplementation { extendsFrom(testDependency) }
+}
+
+configurations.all {
+    val jackson2Versions = mapOf(
+        "com.fasterxml.jackson.core:jackson-annotations" to libs.versions.jackson2.annotations.get(),
+        "com.fasterxml.jackson.core:jackson-core" to libs.versions.jackson2.core.get(),
+        "com.fasterxml.jackson.core:jackson-databind" to libs.versions.jackson2.databind.get(),
+        "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml" to libs.versions.jackson2.yaml.get(),
+        "com.fasterxml.jackson.datatype:jackson-datatype-jsr310" to libs.versions.jackson2.jsr310.get(),
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm" to libs.versions.kotlinx.modules.get(),
+        "org.jetbrains.kotlinx:kotlinx-coroutines-reactive" to libs.versions.kotlinx.modules.get(),
+        "org.jetbrains.kotlinx:kotlinx-coroutines-reactor" to libs.versions.kotlinx.modules.get(),
+        "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j" to libs.versions.kotlinx.modules.get(),
+        "org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm" to libs.versions.kotlinx.modules.get(),
+        "org.jetbrains.kotlinx:kotlinx-serialization-cbor-jvm" to libs.versions.kotlinx.modules.get(),
+        "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm" to libs.versions.kotlinx.modules.get(),
+        "tools.jackson.core:jackson-core" to libs.versions.jackson.modules.get(),
+        "tools.jackson.core:jackson-databind" to libs.versions.jackson.modules.get(),
+        "tools.jackson.datatype:jackson-datatype-javax-money" to libs.versions.jackson.modules.get(),
+        "tools.jackson.module:jackson-module-blackbird" to libs.versions.jackson.modules.get(),
+        "tools.jackson.module:jackson-module-jaxb-annotations" to libs.versions.jackson.modules.get(),
+        "tools.jackson.module:jackson-module-kotlin" to libs.versions.jackson.modules.get(),
+    )
+
+    resolutionStrategy.eachDependency {
+        jackson2Versions["${requested.group}:${requested.name}"]?.also { version ->
+            useVersion(version)
+            because("Avoid jackson conflicts")
+        }
+    }
 }
 
 dependencies {
@@ -195,7 +224,7 @@ publishing {
     }
     repositories {
         maven {
-            url = URI.create(System.getenv("REPOSITORY_PUBLISHER_URL")?:"http://localhost:9999/release")
+            url = URI.create(System.getenv("REPOSITORY_PUBLISHER_URL") ?: "http://localhost:9999/release")
             isAllowInsecureProtocol = true
             credentials {
                 username = System.getenv("REPOSITORY_PUBLISHER_USERNAME")

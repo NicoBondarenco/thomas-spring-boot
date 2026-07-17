@@ -20,7 +20,7 @@ class RequestExtensionTest {
 
     @Test
     fun `Bearer token should return null if authorization header is empty`() {
-        val request = requestMock(authToken = "")
+        val request = requestMock(authToken = EMPTY_STRING)
         assertNull(request.bearerToken())
     }
 
@@ -51,7 +51,7 @@ class RequestExtensionTest {
 
     @Test
     fun `Current Unity should return null if unity header is empty`() {
-        val request = requestMock(currentUnity = "")
+        val request = requestMock(currentUnity = EMPTY_STRING)
         assertNull(request.currentUnity())
     }
 

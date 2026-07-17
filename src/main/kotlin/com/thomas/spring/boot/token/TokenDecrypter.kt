@@ -39,7 +39,7 @@ class TokenDecrypter(properties: TokenDecrypterProperties) {
         if (token.trim().isEmpty()) {
             throw TokenDecryptionException(filterAuthenticationFilterTokenDataEmptyToken())
         }
-        val parts = token.split(".")
+        val parts = token.split(".").map { it.trim() }
         if (parts.size != 2) {
             throw TokenDecryptionException(filterAuthenticationFilterTokenDataEmptySignature())
         }

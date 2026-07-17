@@ -1,5 +1,6 @@
 package com.thomas.spring.boot.handler
 
+import com.thomas.spring.boot.extension.EMPTY_STRING
 import com.thomas.spring.boot.extension.httpStatus
 import com.thomas.spring.boot.extension.toProblemDetail
 import org.springframework.http.HttpHeaders
@@ -38,7 +39,7 @@ class SpringBootExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatusCode,
         exchange: ServerWebExchange
     ): Mono<ResponseEntity<Any>> {
-        val response = body ?: createProblemDetail(ex, status, "", null, null, exchange)
+        val response = body ?: createProblemDetail(ex, status, EMPTY_STRING, null, null, exchange)
         return super.handleExceptionInternal(ex, response, headers, status, exchange)
     }
 

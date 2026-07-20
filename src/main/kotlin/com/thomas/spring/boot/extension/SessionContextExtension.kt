@@ -1,7 +1,6 @@
 package com.thomas.spring.boot.extension
 
 import com.thomas.core.context.SessionContextHolder
-import com.thomas.core.context.SessionContextHolder.updateContext
 import com.thomas.core.model.security.SecurityUser
 import com.thomas.spring.boot.security.SecurityUserAuthentication
 import org.springframework.security.core.context.ReactiveSecurityContextHolder

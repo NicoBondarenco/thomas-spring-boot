@@ -9,6 +9,7 @@ import com.thomas.core.util.NumberUtils.randomLong
 import com.thomas.core.util.StringUtils.randomString
 import com.thomas.spring.boot.i18n.SpringMessageI18N.errorExceptionMappingRequestParameterInvalidParameter
 import com.thomas.spring.boot.properties.PaginationProperties
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import java.time.OffsetDateTime
@@ -22,9 +23,11 @@ import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.springframework.core.MethodParameter
-import org.springframework.web.bind.support.WebDataBinderFactory
-import org.springframework.web.context.request.NativeWebRequest
-import org.springframework.web.method.support.ModelAndViewContainer
+import org.springframework.http.server.reactive.ServerHttpRequest
+import org.springframework.util.LinkedMultiValueMap
+import org.springframework.util.MultiValueMap
+import org.springframework.web.reactive.BindingContext
+import org.springframework.web.server.ServerWebExchange
 
 class PageRequestPeriodResolverTest {
 
@@ -32,13 +35,16 @@ class PageRequestPeriodResolverTest {
     private lateinit var resolver: PageRequestPeriodResolver
 
     private val parameter: MethodParameter = mockk()
-    private val container: ModelAndViewContainer = mockk()
-    private val request: NativeWebRequest = mockk()
-    private val factory: WebDataBinderFactory = mockk()
+    private val context: BindingContext = mockk()
+    private val exchange: ServerWebExchange = mockk()
+    private val request: ServerHttpRequest = mockk()
+    private val parameters: MultiValueMap<String, String> = LinkedMultiValueMap()
 
     @BeforeEach
     fun setUp() {
         resolver = PageRequestPeriodResolver(properties.defaultPageNumber, properties.defaultPageSize)
+        clearAllMocks()
+        parameters.clear()
     }
 
     @Test
@@ -75,7 +81,7 @@ class PageRequestPeriodResolverTest {
             pageSort.asParameter(),
         )
 
-        val pagination = resolver.resolveArgument(parameter, container, request, factory) as PageRequestPeriod
+        val pagination = resolver.resolveArgument(parameter, context, exchange).block() as PageRequestPeriod
         assertEquals(createdStart, pagination.createdStart)
         assertEquals(createdEnd, pagination.createdEnd)
         assertEquals(updatedStart, pagination.updatedStart)
@@ -88,7 +94,7 @@ class PageRequestPeriodResolverTest {
     @Test
     fun `Should resolve all arguments null correctly`() {
         configureRequest()
-        val pagination = resolver.resolveArgument(parameter, container, request, factory) as PageRequestPeriod
+        val pagination = resolver.resolveArgument(parameter, context, exchange).block() as PageRequestPeriod
         assertNull(pagination.createdStart)
         assertNull(pagination.createdEnd)
         assertNull(pagination.updatedStart)
@@ -102,7 +108,7 @@ class PageRequestPeriodResolverTest {
     fun `Should throws exception when date is invalid`() {
         val value = randomString()
         configureRequest(createdStart = value)
-        val exception = assertThrows<RequestParameterException> { resolver.resolveArgument(parameter, container, request, factory) }
+        val exception = assertThrows<RequestParameterException> { resolver.resolveArgument(parameter, context, exchange).block() }
         assertEquals(errorExceptionMappingRequestParameterInvalidParameter("cs", value), exception.message)
     }
 
@@ -110,7 +116,7 @@ class PageRequestPeriodResolverTest {
     fun `Should throws exception when number is invalid`() {
         val value = randomString()
         configureRequest(pageNumber = value)
-        val exception = assertThrows<RequestParameterException> { resolver.resolveArgument(parameter, container, request, factory) }
+        val exception = assertThrows<RequestParameterException> { resolver.resolveArgument(parameter, context, exchange).block() }
         assertEquals(errorExceptionMappingRequestParameterInvalidParameter("p", value), exception.message)
     }
 
@@ -118,7 +124,9 @@ class PageRequestPeriodResolverTest {
     fun `Should throws exception when sort is invalid`() {
         val value = randomString()
         configureRequest(pageSort = Array(1) { value })
-        val exception = assertThrows<RequestParameterException> { resolver.resolveArgument(parameter, container, request, factory) }
+        val exception = assertThrows<RequestParameterException> {
+            resolver.resolveArgument(parameter, context, exchange)
+        }
         assertEquals(errorExceptionMappingRequestParameterInvalidParameter("o", value), exception.message)
     }
 
@@ -126,7 +134,7 @@ class PageRequestPeriodResolverTest {
     fun `Should throws exception when sort has invalid size`() {
         val value = " ,${randomString()}"
         configureRequest(pageSort = Array(1) { value })
-        val exception = assertThrows<RequestParameterException> { resolver.resolveArgument(parameter, container, request, factory) }
+        val exception = assertThrows<RequestParameterException> { resolver.resolveArgument(parameter, context, exchange) }
         assertEquals(errorExceptionMappingRequestParameterInvalidParameter("o", value), exception.message)
     }
 
@@ -139,13 +147,15 @@ class PageRequestPeriodResolverTest {
         pageSize: String? = null,
         pageSort: Array<String>? = null,
     ) {
-        every { request.getParameter("cs") } returns createdStart
-        every { request.getParameter("ce") } returns createdEnd
-        every { request.getParameter("us") } returns updatedStart
-        every { request.getParameter("ue") } returns updatedEnd
-        every { request.getParameter("p") } returns pageNumber
-        every { request.getParameter("s") } returns pageSize
-        every { request.getParameterValues("o") } returns pageSort
+        every { exchange.request } returns request
+        every { request.queryParams } returns parameters
+        parameters["p"] = pageNumber
+        parameters["s"] = pageSize
+        parameters.addAll("o", pageSort?.toList() ?: emptyList())
+        parameters["cs"] = createdStart
+        parameters["ce"] = createdEnd
+        parameters["us"] = updatedStart
+        parameters["ue"] = updatedEnd
     }
 
     private fun List<PageSort>.asParameter(): Array<String> = this.map {

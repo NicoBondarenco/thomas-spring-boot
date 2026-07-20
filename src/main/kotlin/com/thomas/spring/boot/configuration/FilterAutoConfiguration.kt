@@ -3,31 +3,25 @@ package com.thomas.spring.boot.configuration
 import com.thomas.core.authorization.UnauthorizedUserException
 import com.thomas.spring.boot.extension.toProblemDetail
 import com.thomas.spring.boot.filter.AuthenticationFilter
-import com.thomas.spring.boot.filter.TraceIdentifierFilter
 import com.thomas.spring.boot.filter.SessionContextLifecycleFilter
+import com.thomas.spring.boot.filter.TraceIdentifierFilter
 import com.thomas.spring.boot.filter.UnityFilter
 import com.thomas.spring.boot.handler.SpringBootExceptionHandler
 import com.thomas.spring.boot.token.TokenDecrypter
-import java.net.URI
 import org.springframework.boot.autoconfigure.AutoConfiguration
-import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
+import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.MediaType.APPLICATION_JSON
-import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity
-import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder.AUTHENTICATION
 import org.springframework.security.config.web.server.ServerHttpSecurity
-import org.springframework.security.web.AuthenticationEntryPoint
-import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.ServerAuthenticationEntryPoint
+import org.springframework.web.server.WebFilter
 import reactor.core.publisher.Mono
 import tools.jackson.databind.json.JsonMapper
 
@@ -78,23 +72,13 @@ class FilterAutoConfiguration {
             .pathMatchers("/swagger-ui.html").permitAll()
             .pathMatchers("/webjars/**").permitAll()
             .anyExchange().authenticated()
-    }.addFilterBefore(
-        AuthenticationFilter(tokenDecrypter),
-        UsernamePasswordAuthenticationFilter::class.java
-    ).addFilterBefore(
-        TraceIdentifierFilter(),
-        AuthenticationFilter::class.java
-    ).addFilterBefore(
-        UnityFilter(),
-        UsernamePasswordAuthenticationFilter::class.java
-    ).build()
+    }.addFilterBefore(AuthenticationFilter(tokenDecrypter), AUTHENTICATION)
+        .addFilterBefore(UnityFilter(), AUTHENTICATION)
+        .addFilterBefore(TraceIdentifierFilter(), AUTHENTICATION)
+        .build()
 
     @Bean
-    fun sessionCleanupFilterRegistration(): FilterRegistrationBean<SessionContextLifecycleFilter> = FilterRegistrationBean(
-        SessionContextLifecycleFilter()
-    ).apply {
-        addUrlPatterns("/*")
-        order = HIGHEST_PRECEDENCE
-    }
+    @Order(HIGHEST_PRECEDENCE)
+    fun sessionContextLifecycleFilter(): WebFilter = SessionContextLifecycleFilter()
 
 }

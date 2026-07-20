@@ -5,13 +5,13 @@ import java.util.UUID
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.server.reactive.ServerHttpRequest
 
-const val BEARER_TOKEN_PREFIX = "Bearer "
+const val BEARER_TOKEN_PREFIX = "Bearer"
 const val UNITY_HEADER_TOKEN = "Current-Unity"
 const val TRACE_HEADER_TOKEN = "Trace-Identifier"
 
 fun ServerHttpRequest.bearerToken(): String? = this.headerValue(AUTHORIZATION) {
     it.startsWith(BEARER_TOKEN_PREFIX)
-}?.substring(BEARER_TOKEN_PREFIX.length)
+}?.substringTrimmed(BEARER_TOKEN_PREFIX.length)
 
 fun ServerHttpRequest.currentUnity(): UUID? = this.headerValue(UNITY_HEADER_TOKEN) {
     UUID_REGEX.matches(it)

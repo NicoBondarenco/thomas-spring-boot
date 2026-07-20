@@ -4,8 +4,6 @@ import com.thomas.core.context.SessionContextHolder
 import com.thomas.logger.log.KotlinLogger
 import com.thomas.spring.boot.extension.clearRequestContext
 import org.slf4j.MDC
-import org.springframework.security.core.context.ReactiveSecurityContextHolder
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.server.ServerWebExchange
 import org.springframework.web.server.WebFilter
 import org.springframework.web.server.WebFilterChain

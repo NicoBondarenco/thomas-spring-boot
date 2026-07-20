@@ -5,44 +5,42 @@ import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.read.ListAppender
-import com.thomas.core.context.SessionContextHolder.clearContext
+import com.thomas.core.context.SessionContextHolder
 import com.thomas.core.context.SessionContextHolder.traceIdentifier
 import com.thomas.core.util.StringUtils.randomString
-import jakarta.servlet.DispatcherType
-import jakarta.servlet.FilterChain
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
+import com.thomas.spring.boot.extension.clearRequestContext
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.reset
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.whenever
 import org.slf4j.LoggerFactory
-import org.springframework.security.core.context.SecurityContextHolder.getContext
+import org.springframework.http.HttpHeaders
+import org.springframework.http.server.reactive.ServerHttpRequest
+import org.springframework.web.server.ServerWebExchange
+import org.springframework.web.server.WebFilterChain
+import reactor.core.publisher.Mono
 
 class TraceIdentifierFilterTest {
 
     private lateinit var classLogger: Logger
     private lateinit var loggerAppender: ListAppender<ILoggingEvent>
 
-    private val requestMock = mock<HttpServletRequest>()
-    private val responseMock = mock<HttpServletResponse>()
-    private val chainMock = mock<FilterChain>()
+    private val exchangeMock = mockk<ServerWebExchange>()
+    private val requestMock = mockk<ServerHttpRequest>()
+    private val chainMock = mockk<WebFilterChain>()
+    private val requestHeaders = HttpHeaders()
 
     private lateinit var filter: TraceIdentifierFilter
 
     @BeforeEach
     fun setup() {
-        clearContext()
-        getContext().authentication = null
-        reset(requestMock)
+        SessionContextHolder.clearRequestContext()
+        clearAllMocks()
         filter = TraceIdentifierFilter()
-        doReturn(null).whenever(requestMock).getAttribute(any())
-        doReturn(DispatcherType.REQUEST).whenever(requestMock).dispatcherType
         setupLogger(TraceIdentifierFilter::class.java.name)
+        setupRequest()
     }
 
     private fun setupLogger(name: String) {
@@ -54,19 +52,24 @@ class TraceIdentifierFilterTest {
         classLogger.addAppender(loggerAppender)
     }
 
+    private fun setupRequest() {
+        every { exchangeMock.request } returns requestMock
+        every { requestMock.headers } returns requestHeaders
+        every { chainMock.filter(any()) } returns Mono.empty()
+    }
+
     @Test
     fun `Trace Identifier filter should process identifier correctly`() {
         val identifier = randomString()
-        doReturn(identifier).whenever(requestMock).getHeader("Trace-Identifier")
-        filter.doFilter(requestMock, responseMock, chainMock)
+        requestHeaders["Trace-Identifier"] = identifier
+        filter.filter(exchangeMock, chainMock)
         assertEquals(traceIdentifier, identifier)
     }
 
     @Test
     fun `Trace Identifier filter should process identifier correctly when null`() {
         val identifier = traceIdentifier
-        doReturn(null).whenever(requestMock).getHeader("Trace-Identifier")
-        filter.doFilter(requestMock, responseMock, chainMock)
+        filter.filter(exchangeMock, chainMock)
         assertEquals(traceIdentifier, identifier)
     }
 

@@ -5,7 +5,6 @@ import com.thomas.core.context.SessionContextHolder.currentLocale
 import com.thomas.core.context.SessionContextHolder.currentToken
 import com.thomas.core.context.SessionContextHolder.currentUnity
 import java.util.function.Consumer
-import kotlin.collections.plus
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpHeaders.ACCEPT
 import org.springframework.http.HttpHeaders.ACCEPT_LANGUAGE

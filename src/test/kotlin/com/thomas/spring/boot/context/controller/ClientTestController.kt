@@ -67,9 +67,9 @@ class ClientTestController {
         @RequestHeader headers: HttpHeaders
     ): ResponseEntity<InternalHeadersResponse> = ResponseEntity.ok(
         InternalHeadersResponse(
-            unityId = headers[AUTHORIZATION]!!.first().toUUIDOrNull()!!,
-            traceId = headers[UNITY_HEADER_TOKEN]!!.first(),
-            authHeader = headers[TRACE_HEADER_TOKEN]!!.first(),
+            authHeader = headers[AUTHORIZATION]!!.first(),
+            unityId = headers[UNITY_HEADER_TOKEN]!!.first().toUUIDOrNull()!!,
+            traceId = headers[TRACE_HEADER_TOKEN]!!.first(),
         )
     )
 

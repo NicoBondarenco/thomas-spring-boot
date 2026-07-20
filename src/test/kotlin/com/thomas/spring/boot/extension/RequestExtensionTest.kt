@@ -4,11 +4,13 @@ import com.thomas.core.extension.randomUUIDv7
 import com.thomas.core.util.StringUtils.randomString
 import io.mockk.every
 import io.mockk.mockk
-import jakarta.servlet.http.HttpServletRequest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpHeaders.AUTHORIZATION
+import org.springframework.http.server.reactive.ServerHttpRequest
+import org.springframework.util.LinkedMultiValueMap
 
 class RequestExtensionTest {
 
@@ -91,10 +93,13 @@ class RequestExtensionTest {
         authToken: String? = null,
         currentUnity: String? = null,
         traceIdentifier: String? = null,
-    ): HttpServletRequest = mockk<HttpServletRequest> {
-        every { getHeader(AUTHORIZATION) } returns authToken
-        every { getHeader("Current-Unity") } returns currentUnity
-        every { getHeader("Trace-Identifier") } returns traceIdentifier
+    ): ServerHttpRequest = mockk<ServerHttpRequest> {
+        val requestHeaders = HttpHeaders()
+        requestHeaders[AUTHORIZATION] = authToken
+        requestHeaders["Current-Unity"] = currentUnity
+        requestHeaders["Trace-Identifier"] = traceIdentifier
+
+        every { headers } returns requestHeaders
     }
 
 }

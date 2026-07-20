@@ -1,7 +1,7 @@
 package com.thomas.spring.boot.extension
 
-import com.thomas.core.context.SessionContextHolder.traceIdentifier
 import com.thomas.core.context.SessionContextHolder.scopeIdentifier
+import com.thomas.core.context.SessionContextHolder.traceIdentifier
 import com.thomas.core.exception.ApplicationException
 import com.thomas.core.exception.ErrorType
 import com.thomas.core.exception.ErrorType.Companion.APPLICATION_ERROR

@@ -8,6 +8,8 @@ import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
 import java.time.Duration
 import java.util.concurrent.TimeUnit.MILLISECONDS
+import org.springframework.beans.factory.ObjectProvider
+import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -17,6 +19,7 @@ import org.springframework.boot.webclient.WebClientCustomizer
 import org.springframework.boot.webclient.autoconfigure.WebClientAutoConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
+import org.springframework.context.annotation.Scope
 import org.springframework.http.HttpHeaders.ACCEPT
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
@@ -92,5 +95,24 @@ class WebClientCoroutinesAutoConfiguration {
         builder.defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
         builder.defaultStatusHandler(HttpStatusCode::isStatusError, ClientResponse::errorHandler)
     }
+
+    @Bean
+    @Primary
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    @ConditionalOnMissingBean
+    fun webClientBuilder(
+        customizerProvider: ObjectProvider<WebClientCustomizer>
+    ): WebClient.Builder = WebClient.builder().also { builder ->
+        customizerProvider.orderedStream().forEach { customizer ->
+            customizer.customize(builder)
+        }
+    }
+
+    @Bean
+    @Primary
+    @ConditionalOnMissingBean
+    fun webClient(
+        builder: WebClient.Builder
+    ): WebClient = builder.build()
 
 }

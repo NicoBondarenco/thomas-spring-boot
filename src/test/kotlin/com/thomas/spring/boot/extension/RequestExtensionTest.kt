@@ -1,5 +1,6 @@
 package com.thomas.spring.boot.extension
 
+import com.thomas.core.extension.EMPTY_STRING
 import com.thomas.core.extension.randomUUIDv7
 import com.thomas.core.util.StringUtils.randomString
 import io.mockk.every

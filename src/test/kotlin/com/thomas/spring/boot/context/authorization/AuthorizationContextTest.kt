@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus.OK
 import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.ProblemDetail
 import org.springframework.web.reactive.function.client.WebClient
-import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.json.JsonMapper
 import tools.jackson.module.kotlin.readValue
 
 @Suppress("SpringJavaInjectionPointsAutowiringInspection")
@@ -40,7 +40,7 @@ class AuthorizationContextTest : SpringBootBaseTest() {
     lateinit var client: WebClient
 
     @Autowired
-    lateinit var mapper: ObjectMapper
+    lateinit var mapper: JsonMapper
 
     @Autowired
     lateinit var controller: AuthorizationTestController

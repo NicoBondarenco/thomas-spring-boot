@@ -46,7 +46,7 @@ class OpenAPIAutoConfiguration {
                     securityProperties.name,
                     SecurityScheme()
                         .name(securityProperties.name)
-                        .type(SecurityScheme.Type.HTTP)
+                        .type(securityProperties.type)
                         .scheme(securityProperties.scheme)
                         .bearerFormat(securityProperties.format)
                         .description(securityProperties.description)

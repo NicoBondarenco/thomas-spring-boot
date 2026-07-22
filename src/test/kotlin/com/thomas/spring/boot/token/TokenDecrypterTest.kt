@@ -1,10 +1,10 @@
 package com.thomas.spring.boot.token
 
+import com.thomas.core.extension.EMPTY_STRING
 import com.thomas.core.model.security.SecurityRole
 import com.thomas.core.model.security.SecurityUnity
 import com.thomas.core.model.security.SecurityUser
 import com.thomas.core.model.security.SecurityUserType
-import com.thomas.spring.boot.extension.EMPTY_STRING
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataEmptySignature
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataEmptyToken
 import com.thomas.spring.boot.i18n.SpringMessageI18N.filterAuthenticationFilterTokenDataInvalidSignature

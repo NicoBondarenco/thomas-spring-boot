@@ -4,6 +4,7 @@ import com.thomas.core.context.SessionContextHolder
 import com.thomas.core.context.SessionContextHolder.currentLocale
 import com.thomas.core.context.SessionContextHolder.currentToken
 import com.thomas.core.context.SessionContextHolder.currentUnity
+import com.thomas.core.extension.toStringOrEmpty
 import java.util.function.Consumer
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpHeaders.ACCEPT

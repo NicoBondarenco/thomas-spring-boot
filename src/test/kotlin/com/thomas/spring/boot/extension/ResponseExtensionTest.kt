@@ -60,7 +60,7 @@ class ResponseExtensionTest {
     fun `ApplicationException should map to response correctly with custom error type`() {
         val uri = URI.create("/${randomString().replace(" ", "-")}")
         val message = randomString()
-        val errorValue = randomString(spaces = false)
+        val errorValue = randomString(spaces = false, numbers = false)
         val errorType = ErrorType(errorValue.uppercase(), errorValue.lowercase(), errorValue.lowercase(), errorValue)
         val exception = TestApplicationException(message, errorType, null, null)
 

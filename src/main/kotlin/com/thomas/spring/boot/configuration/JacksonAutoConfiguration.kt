@@ -82,13 +82,6 @@ class JacksonAutoConfiguration {
     @Bean
     @Primary
     @ConditionalOnMissingBean
-    fun objectMapper(
-        jsonMapper: JsonMapper
-    ): ObjectMapper = jsonMapper
-
-    @Bean
-    @Primary
-    @ConditionalOnMissingBean
     fun jacksonJsonHttpMessageConverter(
         jsonMapper: JsonMapper
     ): JacksonJsonHttpMessageConverter = JacksonJsonHttpMessageConverter(jsonMapper)

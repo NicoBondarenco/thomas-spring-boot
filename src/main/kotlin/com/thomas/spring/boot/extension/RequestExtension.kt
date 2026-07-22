@@ -1,6 +1,7 @@
 package com.thomas.spring.boot.extension
 
 import com.thomas.core.extension.UUID_REGEX
+import com.thomas.core.extension.substringTrimmed
 import java.util.UUID
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.server.reactive.ServerHttpRequest

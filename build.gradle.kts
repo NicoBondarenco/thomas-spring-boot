@@ -123,6 +123,14 @@ kover {
         }
     }
     reports {
+        filters {
+            excludes {
+                classes(
+                    "com.thomas.spring.boot.**\$Companion",
+                    "com.thomas.spring.boot.**\$**\$*",
+                )
+            }
+        }
         total {
             verify {
                 onCheck = false

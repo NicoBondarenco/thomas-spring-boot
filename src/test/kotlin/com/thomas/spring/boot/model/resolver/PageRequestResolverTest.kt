@@ -86,6 +86,16 @@ class PageRequestResolverTest {
     }
 
     @Test
+    fun `Should resolve all arguments not informed correctly`() {
+        every { exchange.request } returns request
+        every { request.queryParams } returns parameters
+        val pagination = resolver.resolveArgument(parameter, context, exchange).block() as PageRequest
+        assertEquals(properties.defaultPageNumber, pagination.pageNumber)
+        assertEquals(properties.defaultPageSize, pagination.pageSize)
+        assertTrue(pagination.pageSort.isEmpty())
+    }
+
+    @Test
     fun `Should throws exception when number is invalid`() {
         val value = randomString()
         configureRequest(pageNumber = value)

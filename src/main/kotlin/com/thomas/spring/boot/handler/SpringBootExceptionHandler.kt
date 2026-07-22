@@ -1,6 +1,6 @@
 package com.thomas.spring.boot.handler
 
-import com.thomas.spring.boot.extension.EMPTY_STRING
+import com.thomas.core.extension.EMPTY_STRING
 import com.thomas.spring.boot.extension.httpStatus
 import com.thomas.spring.boot.extension.toProblemDetail
 import org.springframework.http.HttpHeaders

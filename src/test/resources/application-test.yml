@@ -5,3 +5,9 @@ spring:
     token:
       decrypter:
         encryption-key: "66c567ba-1460-4093-9eeb-2a713fee1683"
+
+  web:
+    error:
+      include-message: always
+      include-exception: true
+      include-stacktrace: always

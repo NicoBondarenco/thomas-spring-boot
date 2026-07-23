@@ -15,13 +15,16 @@ import kotlinx.serialization.decodeFromByteArray
 import kotlinx.serialization.encodeToByteArray
 
 @OptIn(ExperimentalSerializationApi::class)
-class TokenDecrypter(properties: TokenDecrypterProperties) {
+class TokenDecrypter(
+    private val properties: TokenDecrypterProperties
+) {
 
     private val cbor = Cbor { ignoreUnknownKeys = true }
     private val key = SecretKeySpec(properties.encryptionKey.toByteArray(), properties.encryptionAlgorithm)
-    private val hmac = Mac.getInstance(properties.encryptionAlgorithm).apply { init(key) }
     private val encoder = Base64.getEncoder()
     private val decoder = Base64.getDecoder()
+    private val hmac: Mac
+        get() = Mac.getInstance(properties.encryptionAlgorithm).apply { init(key) }
 
     fun decrypt(token: String): SecurityUser {
         val (payload, signature) = decodeToken(token)

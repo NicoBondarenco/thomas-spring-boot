@@ -84,6 +84,7 @@ spring-boot-autoconfigure-base = { module = "org.springframework.boot:spring-boo
 spring-boot-autoconfigure-processor = { module = "org.springframework.boot:spring-boot-autoconfigure-processor" }
 spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-webclient-test = { module = "org.springframework.boot:spring-boot-webtestclient" }
 
 springdoc-openapi-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "springdoc-openapi" }
 
@@ -167,6 +168,7 @@ spring-compile-all = [
 
 spring-test-all = [
   "spring-boot-starter-test",
+  "spring-boot-webclient-test",
 ]
 
 wiremock-all = [

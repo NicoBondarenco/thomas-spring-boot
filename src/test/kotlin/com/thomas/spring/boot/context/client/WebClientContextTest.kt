@@ -1,25 +1,22 @@
-package com.thomas.spring.boot.context.authorization
+package com.thomas.spring.boot.context.client
 
-import com.thomas.core.context.SessionContextHolder.currentToken
-import com.thomas.core.context.SessionContextHolder.currentUnity
-import com.thomas.core.context.SessionContextHolder.currentUser
-import com.thomas.core.context.SessionContextHolder.traceIdentifier
+import com.thomas.core.context.SessionContextHolder
 import com.thomas.core.extension.randomUUIDv7
-import com.thomas.core.generator.SecurityUserGenerator.generateSecurityUser
-import com.thomas.core.util.NumberUtils.randomBigDecimal
+import com.thomas.core.generator.SecurityUserGenerator
+import com.thomas.core.util.NumberUtils
 import com.thomas.spring.boot.context.SpringBootBaseTest
 import com.thomas.spring.boot.context.controller.ClientTestController
 import com.thomas.spring.boot.context.model.response.InternalHeadersResponse
 import com.thomas.spring.boot.context.model.response.SimpleResponse
 import com.thomas.spring.boot.context.model.response.TypedResponse
 import com.thomas.spring.boot.extension.awaitCall
-import com.thomas.spring.boot.extension.withDefaultHeaders
-import com.thomas.spring.boot.extension.withDefaultInternalHeaders
+import com.thomas.spring.boot.extension.withDefault
+import com.thomas.spring.boot.extension.withDefaultInternal
 import com.thomas.spring.boot.token.TokenDecrypter
 import java.math.BigDecimal
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -65,14 +62,14 @@ class WebClientContextTest : SpringBootBaseTest() {
 
     @Test
     fun `When response is typed should map response correctly`() = runTest(StandardTestDispatcher()) {
-        val expected = TypedResponse(valueTyped = randomBigDecimal())
+        val expected = TypedResponse(valueTyped = NumberUtils.randomBigDecimal())
         controller.typedResponse = expected
         testCall<TypedResponse<BigDecimal>>("$baseUrl/typed", expected)
     }
 
     @Test
     fun `When response is typed list should map response correctly`() = runTest(StandardTestDispatcher()) {
-        val expected = listOf(TypedResponse(valueTyped = randomBigDecimal()))
+        val expected = listOf(TypedResponse(valueTyped = NumberUtils.randomBigDecimal()))
         controller.typedList = expected
         testCall<List<TypedResponse<BigDecimal>>>("$baseUrl/typed-list", expected)
     }
@@ -93,23 +90,23 @@ class WebClientContextTest : SpringBootBaseTest() {
 
     @Test
     fun `When internal headers are set should receive them correctly`() = runTest(StandardTestDispatcher()) {
-        currentUser = generateSecurityUser()
-        currentUnity = randomUUIDv7()
-        currentToken = decrypter.encrypt(currentUser)
+        SessionContextHolder.currentUser = SecurityUserGenerator.generateSecurityUser()
+        SessionContextHolder.currentUnity = randomUUIDv7()
+        SessionContextHolder.currentToken = decrypter.encrypt(SessionContextHolder.currentUser)
         val expected = InternalHeadersResponse(
-            unityId = currentUnity!!,
-            traceId = traceIdentifier,
-            authHeader = "Bearer $currentToken",
+            unityId = SessionContextHolder.currentUnity!!,
+            traceId = SessionContextHolder.traceIdentifier,
+            authHeader = "Bearer ${SessionContextHolder.currentToken}",
         )
-        val response = client.get().uri("$baseUrl/internal-headers").withDefaultInternalHeaders().awaitCall<InternalHeadersResponse>()
-        assertEquals(HttpStatus.OK, response.statusCode)
-        assertEquals(expected, response.body)
+        val response = client.get().uri("$baseUrl/internal-headers").withDefaultInternal().awaitCall<InternalHeadersResponse>()
+        Assertions.assertEquals(HttpStatus.OK, response.statusCode)
+        Assertions.assertEquals(expected, response.body)
     }
 
     private suspend inline fun <reified T : Any> testCall(uri: String, expected: T) {
-        val response = client.get().uri(uri).withDefaultHeaders().awaitCall<T>()
-        assertEquals(HttpStatus.OK, response.statusCode)
-        assertEquals(expected, response.body)
+        val response = client.get().uri(uri).withDefault().awaitCall<T>()
+        Assertions.assertEquals(HttpStatus.OK, response.statusCode)
+        Assertions.assertEquals(expected, response.body)
     }
 
 }

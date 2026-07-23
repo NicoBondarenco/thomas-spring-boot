@@ -99,6 +99,7 @@ dependencies {
 
     testDependency(libs.bundles.junit.all)
     testDependency(testFixtures(libs.thomas.core.lib))
+    testDependency(libs.bundles.spring.boot.all)
     testDependency(libs.bundles.spring.compile.all)
     testDependency(libs.bundles.spring.test.all)
     testDependency(libs.bundles.wiremock.all)

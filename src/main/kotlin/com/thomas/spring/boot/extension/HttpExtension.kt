@@ -42,4 +42,5 @@ fun defaultHeaders(
         headers[CONTENT_TYPE] = APPLICATION_JSON_VALUE
     }
     requestHeaders.forEach { (key, value) -> headers[key] = value }
+    println(headers)
 }

@@ -12,9 +12,8 @@ import com.thomas.spring.boot.extension.PROBLEM_SPECIFICS_PROPERTY
 import com.thomas.spring.boot.extension.PROBLEM_TIMESTAMP_PROPERTY
 import com.thomas.spring.boot.extension.PROBLEM_TRACE_PROPERTY
 import com.thomas.spring.boot.extension.awaitCall
-import com.thomas.spring.boot.extension.get
-import com.thomas.spring.boot.extension.withDefaultHeaders
-import com.thomas.spring.boot.extension.withDefaultInternalHeaders
+import com.thomas.spring.boot.extension.withDefault
+import com.thomas.spring.boot.extension.withDefaultInternal
 import com.thomas.spring.boot.token.TokenDecrypter
 import java.net.URI
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -37,18 +36,18 @@ import tools.jackson.module.kotlin.readValue
 class AuthorizationContextTest : SpringBootBaseTest() {
 
     @Autowired
-    lateinit var client: WebClient
+    private lateinit var client: WebClient
 
     @Autowired
-    lateinit var mapper: JsonMapper
+    private lateinit var mapper: JsonMapper
 
     @Autowired
-    lateinit var controller: AuthorizationTestController
+    private lateinit var controller: AuthorizationTestController
 
     @Autowired
-    lateinit var decrypter: TokenDecrypter
+    private lateinit var decrypter: TokenDecrypter
 
-    lateinit var baseUrl: String
+    private lateinit var baseUrl: String
 
     @BeforeEach
     fun setup() {
@@ -58,7 +57,7 @@ class AuthorizationContextTest : SpringBootBaseTest() {
     @Test
     fun `When authentication header is not set should return unauthorized`() = runTest(StandardTestDispatcher()) {
         val exception = assertThrows<ClientRequestException> {
-            client.get("$baseUrl/auth-test").withDefaultHeaders().awaitCall<ProblemDetail>()
+            client.get().uri("$baseUrl/auth-test").withDefault().awaitCall<ProblemDetail>()
         }
         assertEquals(UNAUTHORIZED, exception.status)
         val body = mapper.readValue<ProblemDetail>(exception.body!!)
@@ -82,7 +81,7 @@ class AuthorizationContextTest : SpringBootBaseTest() {
         currentToken = decrypter.encrypt(securityUser)
         val expected = SimpleResponse()
         controller.simpleResponse = expected
-        val response = client.get("$baseUrl/auth-test").withDefaultInternalHeaders().awaitCall<SimpleResponse>()
+        val response = client.get().uri("$baseUrl/auth-test").withDefaultInternal().awaitCall<SimpleResponse>()
         assertEquals(OK, response.statusCode)
         assertNotNull(response.body)
         assertEquals(expected, response.body)

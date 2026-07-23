@@ -19,4 +19,10 @@ internal object SpringMessageI18N : BundleResolver("strings/spring-strings") {
     fun errorExceptionMappingRequestParameterInvalidParameter(parameter: String, value: String): String =
         formattedMessage("error.exception-mapping.request-parameter.invalid-parameter", parameter, value)
 
+    fun errorClientRequestRequestErrorDefaultMessage(request: String): String =
+        formattedMessage("error.client-request.request-error.default-message", request)
+
+    fun errorClientRequestRequestErrorDefaultTitle(): String =
+        formattedMessage("error.client-request.request-error.default-title")
+
 }

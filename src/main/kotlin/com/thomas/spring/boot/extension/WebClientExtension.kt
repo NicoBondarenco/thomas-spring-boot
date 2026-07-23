@@ -1,26 +1,36 @@
 package com.thomas.spring.boot.extension
 
+import java.util.function.Consumer
 import kotlinx.coroutines.reactor.awaitSingle
+import org.springframework.http.HttpHeaders
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec
 import org.springframework.web.reactive.function.client.WebClient.RequestHeadersSpec
+import org.springframework.web.reactive.function.client.bodyValueWithType
 import org.springframework.web.reactive.function.client.toEntity
 
-fun WebClient.get(
-    uri: String,
-    variables: Array<Any> = emptyArray<Any>()
-): RequestHeadersSpec<*> = get().uri(uri, *variables)
+fun WebClient.query() = this.method(QUERY)
 
-suspend inline fun <reified T : Any> RequestBodySpec.awaitCall() = retrieve().toEntity<T>().awaitSingle()
+suspend inline fun <reified T : Any> RequestHeadersSpec<*>.awaitCall() = retrieve().toEntity<T>().awaitSingle()
 
-fun RequestHeadersSpec<*>.withDefaultInternalHeaders(
-    requestHeaders: Map<String, String> = emptyMap(),
-    hasBody: Boolean = false
-): RequestBodySpec = headers(defaultInternalHeaders(requestHeaders, hasBody)) as RequestBodySpec
+fun RequestHeadersSpec<*>.withDefaultInternal(
+    headers: Map<String, String> = emptyMap(),
+    body: Any? = null
+): RequestHeadersSpec<*> = withHeadersAndBody(defaultInternalHeaders(headers, body != null), body)
 
-fun RequestHeadersSpec<*>.withDefaultHeaders(
-    requestHeaders: Map<String, String> = emptyMap(),
-    hasBody: Boolean = false
-): RequestBodySpec = headers(defaultHeaders(requestHeaders, hasBody)) as RequestBodySpec
+fun RequestHeadersSpec<*>.withDefault(
+    headers: Map<String, String> = emptyMap(),
+    body: Any? = null
+): RequestHeadersSpec<*> = withHeadersAndBody(defaultHeaders(headers, body != null), body)
 
+fun RequestHeadersSpec<*>.withHeadersAndBody(
+    headers: Consumer<HttpHeaders>,
+    body: Any?
+): RequestHeadersSpec<*> = (headers(headers) as RequestBodySpec).let { request ->
+    if (body!= null) {
+        request.bodyValueWithType<Any>(body)
+    } else {
+        request
+    }
+}
 
